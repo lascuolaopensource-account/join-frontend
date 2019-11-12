@@ -1,0 +1,13 @@
+@import "../../../variables";
+
+
+#bazaar-show {
+  & > .col > .row {
+    margin-bottom: map_get($spacers, 3);
+  }
+}
+
+#bazaar-meetings {
+  font-weight: bold;
+  font-size: larger;
+}

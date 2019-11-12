@@ -1,0 +1,151 @@
+<!--suppress HtmlFormInputWithoutLabel -->
+<form novalidate #profileForm="ngForm" class="container">
+  <div *ngIf="showChangedEmailAlert" class="alert alert-black alert-dismissible my-5">
+    <a href="#" class="close" data-dismiss="alert" (click)="showChangedEmailAlert = null">
+      <i class="sos-icon skull"></i></a>
+    <div [innerHTML]="'profile.alert.changedEmail' | translate:{email: showChangedEmailAlert}"></div>
+  </div>
+  <div class="row">
+    <div class="col-8 col-md-10">
+      <h3 *ngIf="!editing">{{ profileUser.firstName }} {{ profileUser.lastName }}</h3>
+      <div class="form-row" *ngIf="editing">
+        <div class="col-12 col-md-6 form-group">
+          <input type="text" class="form-control" #inputFirstName="ngModel"
+                 required maxlength="32" [(ngModel)]="user.firstName" name="profile-first-name"
+                 [class.is-invalid]="inputFirstName.invalid"
+                 autocomplete="given-name" [placeholder]="'profile.edit.firstName' | translate" />
+        </div>
+        <div class="col-12 col-md-6 form-group">
+          <input type="text" class="form-control" required maxlength="32" [(ngModel)]="user.lastName"
+                 #inputLastName="ngModel" [class.is-invalid]="inputLastName.invalid"
+                 name="profile-last-name" autocomplete="family-name"
+                 [placeholder]="'profile.edit.lastName' | translate" />
+        </div>
+      </div>
+    </div>
+    <div class="col-4 col-md-2 text-right">
+      <div class="btn-group" *ngIf="isSelf">
+        <button type="button" class="btn btn-link" *ngIf="editing"
+                (click)="saveProfile()" [disabled]="profileForm.invalid">
+          <i class="fa fa-check"></i>
+        </button>
+        <button type="button" class="btn btn-link" (click)="toggleEditing()">
+          <i class="sos-icon large" [class.edit]="!editing" [class.skull]="editing"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  <div class="row mb-3" *ngIf="profileUser.title || editing">
+    <div class="col font-weight-bold" *ngIf="!editing">
+      <i class="long-dash"></i> {{ profileUser.title }}
+    </div>
+    <div class="col" *ngIf="editing">
+      <input type="text" class="form-control" maxlength="255"
+             [(ngModel)]="user.title" name="profile-title"
+             [placeholder]="'profile.edit.title' | translate" />
+    </div>
+  </div>
+  <div class="row mb-3" *ngIf="profileUser.bio || editing">
+    <div class="col font-weight-bold" *ngIf="!editing">
+      {{ profileUser.bio }}
+    </div>
+    <div class="col" *ngIf="editing">
+      <textarea rows="8" class="form-control" maxlength="400"
+                [(ngModel)]="user.bio" name="profile-bio"
+                [placeholder]="'profile.edit.bio' | translate"></textarea>
+    </div>
+  </div>
+  <div class="row mb-3">
+    <div class="col" *ngIf="!editing">
+      {{ 'profile.skills' | translate }}
+      <ul class="list-inline list-inline-commas d-inline">
+        <li class="list-inline-item font-weight-bold"
+            *ngFor="let s of profileUser.skills">{{ s.name }}</li>
+      </ul>
+    </div>
+    <div class="col" *ngIf="editing">
+      <input type="text" class="form-control" id="search-skill" />
+    </div>
+  </div>
+  <div class="row mb-3">
+    <div class="col-12 col-md-6">
+      <div>{{ 'profile.telephone' | translate }}</div>
+      <a *ngIf="profileUser.telephone && !editing" [href]="'tel:' + profileUser.telephone">
+        <strong>{{ profileUser.telephone }}</strong>
+      </a>
+      <input *ngIf="editing" type="tel" class="form-control" [(ngModel)]="user.telephone"
+             #inputTel="ngModel" [class.is-invalid]="inputTel.invalid" maxlength="128"
+             name="profile-telephone" autocomplete="tel tel-national"
+             [placeholder]="'profile.edit.telephone' | translate" />
+    </div>
+    <div class="col-12 col-md-6 mt-2 mt-md-0">
+      <div>{{ 'profile.email' | translate }}</div>
+      <a *ngIf="!editing" [href]="'mailto:' + profileUser.email">
+        <strong>{{ profileUser.email }}</strong>
+      </a>
+      <input *ngIf="editing" type="email" class="form-control" name="profile-email"
+             #inputEmail="ngModel" [class.is-invalid]="inputEmail.invalid"
+             required email maxlength="255" [(ngModel)]="user.email" autocomplete="email"
+             [placeholder]="'profile.edit.email' | translate" />
+    </div>
+  </div>
+  <div class="row mb-3">
+    <div class="col">
+      <div>{{ 'profile.city' | translate }}</div>
+      <strong *ngIf="!editing && profileUser.city && profileUser.city.city !== null">
+        {{ profileUser.city.city }}</strong>
+      <strong *ngIf="!editing && profileUser.city && !profileUser.city.city">
+        {{ 'profile.edit.city.other' | translate }}</strong>
+      <div class="dropdown" *ngIf="editing">
+        <input type="text" class="form-control"
+               data-toggle="dropdown" data-display="static"
+               aria-haspopup="true" aria-expanded="false" readonly
+               [placeholder]="'profile.edit.city' | translate"
+               [value]="(user.city && !user.city.city) ? ('profile.edit.city.other' | translate) : (user.city && user.city.city)" />
+        <div class="dropdown-menu caret" id="cities-dropdown"
+             (keydown)="searchCityKey$.next($event.which)">
+          <input type="text" class="form-control form-control-sm"
+                 #citySearch (keyup)="searchCity$.next(citySearch.value)"
+                 [placeholder]="'profile.edit.city.search' | translate" />
+          <div class="dropdown-item" (click)="user.city = null" tabindex="0">
+            {{ 'profile.edit.city.empty' | translate }}</div>
+          <div class="dropdown-item" (click)="user.city = {city:null, other:true}" tabindex="0">
+            {{ 'profile.edit.city.other' | translate }}</div>
+          <div class="dropdown-item" *ngFor="let city of foundCities"
+               (click)="user.city = {city:city, other:false}" tabindex="0">{{ city }}</div>
+          <div class="dropdown-item disabled" *ngIf="foundCities.length < 1">
+            {{ 'profile.edit.city.noneFound' | translate }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-5" [hidden]="!showingReservations">
+    <div class="col">
+      <router-outlet (activate)="reservationsOutletChange(true)"
+                     (deactivate)="reservationsOutletChange(false)"></router-outlet>
+    </div>
+  </div>
+</form>
+
+<div class="row fluid-content" id="profile-footer">
+  <div class="col" *ngIf="!isSelf">
+    <button type="button" class="btn btn-link" (click)="favorite()">
+      <i class="fa" [class.fa-heart]="profileUser.favorite"
+         [class.fa-heart-o]="!profileUser.favorite"></i>
+      {{ favoriteText | translate }}
+    </button>
+  </div>
+  <div class="col" *ngIf="isSelf">
+    <a routerLink="/favorites">
+      <i class="sos-icon large bookmark"></i>
+      {{ 'profile.favorites' | translate }}
+    </a>
+  </div>
+  <div class="col" *ngIf="isSelf">
+    <a routerLink="reservations" routerLinkActive="active">
+      <i class="fa fa-calendar"></i>
+      {{ 'profile.reservations' | translate }}
+    </a>
+  </div>
+</div>

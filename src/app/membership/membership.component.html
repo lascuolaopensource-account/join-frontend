@@ -1,0 +1,74 @@
+<div class="row fluid-content larger">
+  <div class="col">
+
+    <h1>{{ 'membership.heading' | translate }}</h1>
+
+    <div class="row" id="memberships">
+      <div class="col-12 col-xl-{{membershipColumnSize}} membership" *ngFor="let membership of memberships"
+           [class.muted]="membership.id === null">
+        <div class="font-weight-bold">{{ 'membership.type' | translate }}</div>
+        <div class="title">
+          {{ membership.name }} -
+          <span class="price">
+            {{ membership.price | currency:'EUR':true }}
+            <span *ngIf="membership.id !== null">{{ 'membership.priceYear' | translate }}</span>
+          </span>
+        </div>
+        <div *ngIf="membership.id !== null" class="inner-my-0 features"
+            [innerHTML]="memberships[0].offer"></div>
+        <div [class.text-magenta]="membership.id !== null" class="features"
+            [innerHTML]="membership.offer"></div>
+
+        <div *ngIf="membership.id !== null" class="bottom-controls">
+          <button *ngIf="user.memberships.request && user.memberships.request.membershipType.id === membership.id && user.memberships.active === null"
+                  class="btn btn-sm btn-link" type="button" (click)="cancelRequest()">
+            {{ 'membership.cancelRequest' | translate }}
+          </button>
+
+          <button *ngIf="(user.memberships.request && user.memberships.request.membershipType.id !== membership.id) ||
+                     (user.memberships.request === null && (
+                        user.memberships.active === null ||
+                        (user.memberships.active && user.memberships.active.membershipType.id !== membership.id)))"
+                  class="btn btn-sm btn-link" [disabled]="user.memberships.active || user.memberships.request" type="button"
+                  (click)="requestNew(membership)">
+            {{ 'membership.requestNew' | translate }}
+          </button>
+
+          <div *ngIf="user.memberships.active && user.memberships.active.membershipType.id === membership.id" class="row">
+            <div class="col-12">
+              <button *ngIf="user.memberships.renewal === null && user.memberships.request === null"
+                      class="btn btn-sm btn-link" type="button" (click)="requestRenewal()">
+                {{ 'membership.requestRenewal' | translate }}
+              </button>
+              <button *ngIf="user.memberships.request && user.memberships.request.membershipType.id === membership.id"
+                      class="btn btn-sm btn-link" type="button" (click)="cancelRequest()">
+                {{ 'membership.cancelRequest' | translate }}
+              </button>
+              <button *ngIf="user.memberships.renewal" class="btn btn-sm btn-link" type="button" (click)="cancelRenewal()">
+                {{ 'membership.cancelRenewal' | translate }}
+              </button>
+            </div>
+            <div class="col-12">
+              <button (click)="cancelActive()" class="btn btn-sm btn-link" type="button">
+                {{ 'membership.cancelActive' | translate }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <div id="memberships-bottom-text" [innerHTML]="bottomTxt"></div>
+        <div class="row" *ngFor="let membership of payedMemberships">
+          <div class="col-12 col-sm-3 col-lg-2">{{ membership.name }}</div>
+          <div class="col-sm-1 d-none d-sm-block text-right-arrow text-right"></div>
+          <div class="col-12 col-sm-8 col-lg-9 mb-3 mb-sm-0">{{ membership.bottom | translate }}</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

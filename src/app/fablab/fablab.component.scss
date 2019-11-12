@@ -1,0 +1,229 @@
+@import "../../variables";
+
+
+.title {
+  text-align: center;
+}
+
+.text-highlight {
+  color: $magenta;
+  font-weight: bold;
+}
+
+#fablab-machines {
+  margin-top: map_get($spacers, 3);
+  & > .col {
+    border-top: 1px solid black;
+    padding-top: 4px;
+    & > .row {
+      border-top: 1px solid black;
+      padding-top: map_get($spacers, 5);
+    }
+  }
+}
+
+.fablab-machine {
+  &, .btn-sm {
+    font-size: 1rem;
+  }
+  .btn-sm {
+    @include padding-y(0);
+    border: 0;
+  }
+  margin-bottom: map_get($spacers, 5);
+  .with-border {
+    border-bottom: 1px solid black;
+  }
+  & > .row {
+    @include padding-y(map_get($spacers, 1));
+    @include no-gutters;
+    & > .col, & > [class^='col-'] {
+      &:first-of-type {
+        font-weight: bold;
+      }
+      &:not(:first-of-type) {
+        padding-left: map_get($spacers, 1);
+      }
+    }
+  }
+  .book-btn {
+    color: $magenta;
+    font-weight: bold;
+    &:before {
+      content: $right-arrow;
+    }
+    &:hover, &.active {
+      color: $yellow;
+    }
+  }
+}
+
+$not-selectable-color: $gray-300;
+$selected-color: $yellow;
+
+#fablab-reservation-form {
+  @include margin-x(-$grid-gutter-width / 2);
+}
+
+#fablab-calendar-box {
+  font-size: 1rem;
+  margin-top: map_get($spacers, 5);
+  margin-bottom: map_get($spacers, 5);
+  border: 1px solid black;
+  padding: map_get($spacers, 5) map_get($spacers, 3) map_get($spacers, 3);
+  position: relative;
+  .box-closer {
+    position: absolute;
+    z-index: 9999;
+    right: 0;
+    top: 0;
+  }
+}
+
+#total-cost {
+  font-size: .9rem;
+}
+
+@include media-breakpoint-up(sm) {
+  #fablab-calendar-box, #total-cost {
+    font-size: $font-size-sm;
+  }
+  #fablab-calendar-box {
+    padding: map_get($spacers, 3);
+  }
+}
+
+@include media-breakpoint-up(md) {
+  #fablab-calendar-box {
+    padding: map_get($spacers, 4);
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  #fablab-calendar-box {
+    font-size: $font-size-base;
+  }
+}
+
+@include media-breakpoint-up(xl) {
+  #fablab-calendar-box {
+    padding: map_get($spacers, 5);
+  }
+  #total-cost {
+    font-size: $font-size-base;
+  }
+}
+
+#fablab-calendar-table, #fablab-calendar-times-table {
+  td {
+    &.selectable {
+      cursor: pointer;
+    }
+    &.not-selectable {
+      background-color: $not-selectable-color;
+    }
+    &.selected {
+      background-color: $selected-color;
+    }
+  }
+}
+
+#fablab-calendar-table {
+  background-color: #000;
+  color: #fff;
+  button, button:hover {
+    color: #fff;
+  }
+  $border: 1px solid white;
+  thead {
+    text-align: center;
+    border-left: $border;
+    border-right: $border;
+    th {
+      border-top-width: 0;
+      border-bottom-width: 0;
+      padding: ($table-cell-padding-sm - .1rem) $table-cell-padding-sm;
+    }
+  }
+  td {
+    text-align: right;
+    border: $border;
+    @include padding-x($table-cell-padding-sm + .3rem);
+    &.opened {
+      background-color: $cyan;
+    }
+    &.selected, &.not-selectable, &.opened {
+      color: black;
+    }
+  }
+}
+
+#fablab-calendar-times-table {
+  td {
+    border: 1px solid black;
+  }
+}
+
+
+.legend {
+  span {
+    $sz: 16px;
+    width: $sz;
+    height: $sz;
+    display: inline-block;
+    vertical-align: middle;
+  }
+}
+#legend-selected span {
+  background-color: $selected-color;
+}
+#legend-not-available span {
+  background-color: $not-selectable-color;
+}
+
+
+#fablab-quotation {
+  background-color: $yellow;
+  @include padding-y(map_get($spacers, 3));
+  .title {
+    font-weight: normal;
+    margin-top: map_get($spacers, 5);
+    margin-bottom: map_get($spacers, 5);
+  }
+  label {
+    font-weight: bold;
+    &:before {
+      content: $right-arrow;
+      margin-right: 8px;
+    }
+  }
+  .quotation-machines {
+    text-align: center;
+    button {
+      margin-bottom: map_get($spacers, 2);
+      background-color: white;
+      font-weight: bold;
+      width: 100%;
+      border: 2px solid black;
+      white-space: normal;
+      &.active {
+        color: black;
+        background-color: $cyan;
+      }
+      &:hover {
+        color: white;
+        background-color: $magenta;
+      }
+    }
+  }
+  input, textarea {
+    background-color: white;
+  }
+  .btn-black {
+    font-weight: bold;
+    @include button-variant(black, black, $magenta, $magenta, $magenta, $magenta);
+  }
+  .form-group {
+    margin-bottom: map_get($spacers, 5);
+  }
+}

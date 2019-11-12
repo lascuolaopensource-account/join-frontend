@@ -1,0 +1,192 @@
+@import "../../variables";
+
+$teach-color: $cyan;
+$event-color: $yellow;
+$research-color: $magenta;
+
+.title, .subtitle {
+  text-align: center;
+}
+
+.title {
+  font-weight: normal;
+}
+
+span.teach, span.learn {
+  color: $teach-color;
+}
+span.event {
+  color: $event-color;
+}
+span.research {
+  color: $research-color;
+}
+
+#bazaar-filters {
+  margin-top: map_get($spacers, 5);
+  $font-size: large;
+  font-size: $font-size;
+  &, & > * {
+    $border: 1px solid black;
+    border-top: $border;
+    border-bottom: $border;
+  }
+  & > * {
+    @include no-gutters;
+  }
+  @include padding-y(3px);
+  .list-inline {
+    @include margin-y(map_get($spacers, 1));
+    .list-inline-item {
+      & > span:first-of-type {
+        cursor: pointer;
+        &.active, &:hover {
+          font-weight: bold;
+        }
+      }
+    }
+  }
+  .filter-teach {
+    &:hover, &.active {
+      color: $teach-color;
+    }
+  }
+  .filter-event {
+    &:hover, &.active {
+      color: $event-color;
+    }
+  }
+  .filter-research {
+    &:hover, &.active {
+      color: $research-color;
+    }
+  }
+  #mines-filter {
+    .list-inline-item span:first-of-type {
+      &:hover {
+        color: $link-hover-color;
+      }
+    }
+  }
+  #propose-btn {
+    font-weight: bold;
+    font-size: $font-size;
+    @include button-variant(black, black, $yellow, $yellow, $yellow, $yellow);
+  }
+}
+
+#bazaar-sorters {
+  text-align: center;
+  margin-top: map_get($spacers, 3);
+  ul {
+    li {
+      color: $gray-600;
+      span:first-of-type {
+        cursor: pointer;
+      }
+      span.active {
+        font-weight: bold;
+      }
+    }
+  }
+  hr {
+    margin-bottom: 0;
+    margin-top: $font-size-base / 2;
+    border-top-color: $gray-600;
+  }
+}
+
+
+#bazaar-ideas {
+  margin-top: map_get($spacers, 5);
+  .bazaar-idea {
+    margin-bottom: map_get($spacers, 2);
+    .score {
+      font-weight: bold;
+      font-size: larger;
+      font-family: FreakGrotesk, sans-serif;
+    }
+    .progress {
+      height: .4rem;
+      margin-top: map_get($spacers, 2);
+    }
+    .right-bar {
+      height: 100%;
+      border-right: 6px solid black;
+      text-align: right;
+      padding-right: map_get($spacers, 3);
+      & > * {
+        display: table;
+        height: 50%;
+        width: 100%;
+        & > * {
+          display: table-cell;
+          vertical-align: middle;
+        }
+      }
+      .long-framework {
+        display: none;
+      }
+      .short-framework {
+        display: table-cell;
+      }
+    }
+    &.learn, &.teach {
+      .right-bar {
+        border-right-color: $teach-color;
+      }
+    }
+    &.event {
+      .right-bar {
+        border-right-color: $event-color;
+      }
+    }
+    &.research {
+      .right-bar {
+        border-right-color: $research-color;
+      }
+    }
+  }
+  .idea-opened {
+    height: 800px;
+    overflow-y: auto;
+    margin-bottom: map_get($spacers, 5);
+    @include padding-y(map_get($spacers, 3));
+    .bazaar-idea {
+      margin-bottom: map_get($spacers, 2);
+      &.opaque {
+        opacity: .6;
+      }
+      .score {
+        font-size: $font-size-base;
+      }
+      .right-bar {
+        .long-framework {
+          display: none;
+        }
+        .short-framework {
+          display: table-cell;
+        }
+      }
+    }
+  }
+}
+
+
+@include media-breakpoint-up(md) {
+  #bazaar-ideas {
+    .idea-opened {
+      margin-bottom: 0;
+    }
+    .bazaar-idea {
+      .right-bar {
+        .long-framework {
+          display: table-cell;
+        }
+        .short-framework {
+          display: none;
+        }
+      }
+    }
+  }
+}

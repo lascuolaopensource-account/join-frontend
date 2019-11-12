@@ -1,0 +1,200 @@
+<h1 class="title">{{ 'fablab.heading' | translate }}</h1>
+
+<div class="row fluid-content" id="fablab-machines">
+  <div class="col">
+    <div class="row">
+      <div class="col-12 col-sm-6 col-lg-4 col-xl-3 fablab-machine"
+           *ngFor="let machine of machines; index as i">
+        <div class="with-border">
+          <div class="font-weight-bold">{{ 'fablab.machine' | translate }}</div>
+          <h4>{{ machine.name }}</h4>
+        </div>
+        <div class="row" *ngIf="machine.workArea">
+          <div class="col-6">{{ 'fablab.machine.workArea' | translate }}</div>
+          <div class="col-6">{{ machine.workArea }}</div>
+        </div>
+        <div class="row" *ngIf="machine.maxHeight">
+          <div class="col-6">{{ 'fablab.machine.maxHeight' | translate }}</div>
+          <div class="col-6">{{ machine.maxHeight }}</div>
+        </div>
+        <div class="row with-border">
+          <div class="col-6">{{ 'fablab.machine.priceHour' | translate }}</div>
+          <div class="col-6">{{ machine['showPrice'] | currency:'EUR':true }}</div>
+        </div>
+        <div class="row with-border" *ngIf="machine.operator">
+          <div class="col-6">{{ 'fablab.machine.operator' | translate }}</div>
+          <div class="col-6">
+            <button class="btn btn-link btn-sm" (click)="setOperator(machine, true)"
+                    [class.text-highlight]="machine['operatorSelected']">
+              {{ 'fablab.machine.operator.yes' | translate }}</button> /
+            <button class="btn btn-link btn-sm" (click)="setOperator(machine, false)"
+                    [class.text-highlight]="!machine['operatorSelected']">
+              {{ 'fablab.machine.operator.no' | translate }}</button>
+          </div>
+        </div>
+        <div class="row with-border">
+          <div class="col font-weight-normal">
+            <strong class="d-block">{{ 'fablab.machine.cuts' | translate }}</strong>
+            <div *ngIf="machine.cutsMetal === true">
+              {{ 'fablab.machine.metal' | translate }}</div>
+            <div *ngIf="machine.cutsNonMetal === true">
+              {{ 'fablab.machine.nonMetal' | translate }}</div>
+            <div *ngIf="machine.cutsMaterials">{{ machine.cutsMaterials }}</div>
+          </div>
+        </div>
+        <div class="row with-border">
+          <div class="col font-weight-normal">
+            <strong class="d-block">{{ 'fablab.machine.engraves' | translate }}</strong>
+            <div *ngIf="machine.engravesMetal == true">
+              {{ 'fablab.machine.metal' | translate }}</div>
+            <div *ngIf="machine.engravesNonMetal == true">
+              {{ 'fablab.machine.nonMetal' | translate }}</div>
+            <div *ngIf="machine.engravesMaterials">{{ machine.engravesMaterials }}</div>
+          </div>
+        </div>
+        <div class="mt-3">
+          <button type="button" class="btn btn-sm btn-link book-btn"
+                  (click)="selectMachine(i)" [class.active]="machineIdx === i">
+            {{ 'fablab.machine.book' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="fablab-reservation-form-anchor"></div>
+<form #reservationForm="ngForm" (submit)="createReservation()" id="fablab-reservation-form"
+      class="fluid-content" *ngIf="machineIdx !== null">
+  <div id="fablab-calendar-box">
+    <div class="box-closer">
+      <button type="button" class="btn btn-lg btn-link" (click)="machineIdx = null">
+        <i class="sos-icon skull"></i></button>
+    </div>
+    <div class="row">
+      <div class="col-12 col-lg-6">
+        <h4 class="mb-3 mb-lg-5">{{ 'fablab.calendar.select.day' | translate }}</h4>
+        <table id="fablab-calendar-table" class="table table-sm">
+          <thead>
+          <tr>
+            <th>
+              <button type="button" class="btn btn-sm btn-link" *ngIf="allowPrevMonth()"
+                      (click)="prevMonth()">&lang;</button>
+            </th>
+            <th colspan="5">
+              {{ 'calendar.month.' + firstDay.getMonth() | translate }} {{ firstDay.getFullYear() }}
+            </th>
+            <th>
+              <button type="button" class="btn btn-sm btn-link" (click)="nextMonth()">&rang;</button>
+            </th>
+          </tr>
+          <tr>
+            <th *ngFor="let dow of daysOfWeek">
+              {{ 'calendar.weekday.' + dow | translate }}
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let week of calendar">
+            <td *ngFor="let day of week"
+                [class.selectable]="dayIsSelectable(day)"
+                [class.not-selectable]="dayNotSelectable(day)"
+                [class.selected]="selectionsH[firstDayY] && selectionsH[firstDayY][firstDayM] &&
+                                  selectionsH[firstDayY][firstDayM][day]"
+                [class.opened]="openedDate === day" (click)="openDay(day)">{{ day }}</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-12 col-lg-6 my-3 my-lg-0" *ngIf="openedDate !== null">
+        <h4 class="mb-3 mb-lg-5">{{ 'fablab.calendar.select.hour' | translate }}</h4>
+        <table id="fablab-calendar-times-table" class="table table-sm table-bordered text-center">
+          <tr *ngFor="let timeRow of timesTable">
+            <td *ngFor="let timeCell of timeRow" (click)="selectTime(timeCell.hour)"
+                [class.selectable]="timeIsSelectable(timeCell.hour)"
+                [class.not-selectable]="timeNotSelectable(timeCell.hour)"
+                [class.selected]="selectionsH[firstDayY] && selectionsH[firstDayY][firstDayM] &&
+                                  selectionsH[firstDayY][firstDayM][openedDate] &&
+                                  selectionsH[firstDayY][firstDayM][openedDate][timeCell.hour]">
+              {{ timeCell.str }}
+            </td>
+          </tr>
+        </table>
+        <div class="legend" id="legend-selected">
+          <span>&nbsp;</span> {{ 'fablab.calendar.selected' | translate }}</div>
+        <div class="legend" id="legend-not-available">
+          <span>&nbsp;</span> {{ 'fablab.calendar.notAvailable' | translate }}</div>
+      </div>
+
+      <div class="col-12 col-lg-6" *ngIf="selectedTimes && selectedTimes.length > 0">
+        <div *ngIf="machine.operator">
+          <div class="form-check">
+            <label class="form-check-label" for="fablab-reservation-operator">
+              <input type="checkbox" class="form-check-input" name="fablab-reservation-operator"
+                     id="fablab-reservation-operator" [(ngModel)]="withOperator" (change)="withOperatorChanged()" />
+              {{ 'fablab.reservation.operator' | translate }}
+            </label>
+          </div>
+        </div>
+        <div class="row no-gutters" id="total-cost">
+          <div class="col-9 text-right-arrow" [innerHTML]="'fablab.reservation.totalPrice' | translate"></div>
+          <div class="col-3 text-right font-weight-bold text-magenta">
+            {{ totalPrice | currency:'EUR':true }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <button type="submit" class="btn btn-lg btn-black"
+          *ngIf="selectedTimes && selectedTimes.length > 0"
+          [disabled]="reservationForm.invalid">
+    {{ 'fablab.reservation.send' | translate }}</button>
+
+</form>
+
+<div class="row fluid-content mt-5" *ngIf="showAlertSuccess || showAlertFailure">
+  <div class="col col-md-8 offset-md-2 col-xl-6 offset-xl-3">
+    <div *ngIf="showAlertSuccess" class="alert alert-black"
+         [innerHTML]="'fablab.reservation.confirmation' | translate"></div>
+    <div *ngIf="showAlertFailure" class="alert alert-danger"
+         [innerHTML]="'fablab.reservation.failure' | translate"></div>
+  </div>
+</div>
+
+<div class="row fluid-content mt-5 justify-content-center" id="fablab-quotation">
+  <div class="col-12 col-md-10 col-lg-9 col-xl-8">
+    <h2 class="title" [innerHTML]="'fablab.quotation.heading' | translate"></h2>
+    <form #quotationForm="ngForm" (submit)="createQuotation($event)">
+      <div class="form-group">
+        <label>{{ 'fablab.quotation.machines' | translate }}</label>
+        <div class="row quotation-machines">
+          <div class="col-12 col-md-6 col-lg-4" *ngFor="let machine of machines; index as i">
+            <button type="button" class="btn btn-link"
+                    [class.active]="quotationMachinesSel[i]"
+                    (click)="toggleMachineQuotation(i)">{{ machine.name }}</button>
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="fablab-realization-of">{{ 'fablab.quotation.realizationOf' | translate }}</label>
+        <textarea rows="8" class="form-control" [(ngModel)]="quotation.realizationOf" required maxlength="1024"
+                  id="fablab-realization-of" name="fablab-realization-of"></textarea>
+      </div>
+      <div class="form-group" *ngIf="quotationAlert !== null">
+        <div class="alert alert-dismissible" role="alert"
+             [class.alert-black]="quotationAlert.success"
+             [class.alert-danger]="quotationAlert.failed">
+          {{ quotationAlert.txt | translate }}
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true" class="sos-icon skull"></span>
+          </button>
+        </div>
+      </div>
+      <div class="form-group text-center">
+        <button type="submit" class="btn btn-black" [disabled]="quotationForm.invalid">
+          {{ 'fablab.quotation.send' | translate }}</button>
+      </div>
+    </form>
+  </div>
+</div>

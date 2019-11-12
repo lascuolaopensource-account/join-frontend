@@ -1,0 +1,143 @@
+<div class="container-fluid">
+
+  <h1 class="activity-title">{{ activity.title }}</h1>
+
+  <div class="row my-3 my-md-5">
+    <div class="col">
+      <div class="carousel slide">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <div [style.background-image]="'url('+activity.coverPic.url+')'"></div>
+          </div>
+          <div class="carousel-item" *ngFor="let image of activity.gallery.images">
+            <div [style.background-image]="'url('+image.url+')'"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="activity-details-row">
+    <div class="row no-gutters pb-3">
+      <div class="col-12 col-sm">
+        <div>{{ 'activity.research.deadline' | translate }}</div>
+        <div>{{ activity.deadline | date:'shortDate' }}</div>
+      </div>
+      <div class="col-12 col-sm-5 col-lg-4" *ngIf="activity.projectLink">
+        <div>{{ 'activity.research.projectLink' | translate }}</div>
+        <div class="text-uppercase">
+          <a [href]="activity.projectLink" target="_blank">
+            {{ 'activity.research.projectLink.value' | translate }}</a>
+        </div>
+      </div>
+      <div class="col-12 col-sm" [class.offset-4]="!activity.projectLink">
+        <div>{{ 'activity.research.state' | translate }}</div>
+        <div class="text-uppercase">{{ projectStateTxt | translate }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="activity-content-row">
+    <div>
+      <div class="row">
+        <div class="col-12 col-sm-6">
+          <h5 class="text-uppercase bottom-border">
+            {{ 'activity.research.valueDetails' | translate }}</h5>
+          <p>{{ activity.valueDetails }}</p>
+        </div>
+        <div class="col-12 col-sm-6 mt-5 mt-sm-0">
+          <h5 class="text-uppercase bottom-border">
+            {{ 'activity.research.motivation' | translate }}</h5>
+          <p>{{ activity.motivation }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 col-sm-6" id="activity-roles">
+      <h5 class="text-uppercase">{{ 'activity.research.roles' | translate }}</h5>
+      <div *ngFor="let role of activity.roles" class="activity-role">
+        <div class="row no-gutters activity-role-details">
+          <div class="col-2 col-lg-1 text-right pr-2 pr-md-3">{{ role.people }}</div>
+          <div class="col-10 col-lg-7">
+            <ul class="list-inline list-inline-commas mb-0">
+              <li class="list-inline-item text-uppercase" *ngFor="let s of role.skills">{{ s.name }}</li>
+            </ul>
+          </div>
+          <div class="col-12 col-lg-4 apply-btns" *ngIf="!deadlinePassed">
+            <button type="button" *ngIf="role.application == null" (click)="toggleApplyForm(role.id)"
+                    class="btn btn-sm btn-link text-magenta text-uppercase font-weight-bold">
+              <i class="sos-icon right-arrow"></i>
+              {{ 'activity.research.role.apply' | translate }}</button>
+            <button type="button" *ngIf="role.application != null" (click)="changeApplication($event, role)"
+                    class="btn btn-sm btn-link text-magenta text-uppercase font-weight-bold">
+              <i class="sos-icon right-arrow"></i>
+              {{ 'activity.research.role.unapply' | translate }}</button>
+          </div>
+        </div>
+        <form class="row" *ngIf="showingApplyForms[role.id]" (submit)="changeApplication($event, role, motivation.value)">
+          <div class="form-group col-12">
+            <!--suppress HtmlFormInputWithoutLabel -->
+            <textarea class="form-control" #motivation [placeholder]="'activity.research.apply.motivation' | translate"
+                      name="application-motivation" id="application-motivation"></textarea>
+          </div>
+          <div class="form-group col-12 text-right">
+            <button type="submit" class="btn btn-sm btn-black">
+              {{ 'activity.research.apply.btn' | translate }}</button>
+          </div>
+        </form>
+        <div *ngIf="showingApplications">
+          <div class="row mb-3" *ngFor="let app of role.applications">
+            <div class="col-12 col-sm-6">
+              <a [routerLink]="['/profile', app.user.id]" class="d-block">
+                {{ app.user.firstName }} {{ app.user.lastName }}</a>
+              <a [href]="'mailto:' + app.user.email" class="d-block" target="_blank">
+                {{ app.user.email }}</a>
+            </div>
+            <div class="col-12 col-sm-6">{{ app.motivation }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center my-3" *ngIf="activity.userHasAccess">
+        <button type="button" class="btn btn-sm btn-black" (click)="toggleApplications()">
+          <span *ngIf="!showingApplications">{{ 'activity.research.applications.show' | translate }}</span>
+          <span *ngIf="showingApplications">{{ 'activity.research.applications.hide' | translate }}</span>
+        </button>
+      </div>
+    </div>
+    <div class="col-12 col-sm-6" id="activity-team">
+      <h5 class="text-uppercase">{{ 'activity.research.team' | translate }}</h5>
+      <div *ngFor="let t of activity.team" class="team-member">
+        <div *ngIf="t.userId == null" class="font-weight-bold">{{ t.firstName }} {{ t.lastName }}</div>
+        <a *ngIf="t.userId != null" class="d-block font-weight-bold" [routerLink]="['/profile', t.userId]">
+          {{ t.firstName }} {{ t.lastName }}</a>
+        <div>{{ t.title }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="activity-bottom-bar" class="mt-5">
+    <div class="row no-gutters">
+      <div class="col" id="activity-contact-btn">
+        <a target="_blank" [href]="contactLink" class="btn btn-link">
+          <i class="sos-icon comment"></i> {{ 'activity.research.contact' | translate }}
+        </a>
+      </div>
+      <div class="col" id="activity-donate-btn">
+        <a target="_blank" [href]="donateLink" class="btn btn-link">
+          <i class="sos-icon skull"></i> {{ 'activity.research.donate' | translate }}
+        </a>
+      </div>
+      <div class="col" id="favorite-btn">
+        <button type="button" class="btn btn-link" (click)="changeFavorite($event)">
+          <span *ngIf="activity.favorite">
+            <i class="fa fa-heart"></i> {{ 'activity.favorite.remove' | translate }}</span>
+          <span *ngIf="!activity.favorite">
+            <i class="fa fa-heart-o"></i> {{ 'activity.favorite.add' | translate }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

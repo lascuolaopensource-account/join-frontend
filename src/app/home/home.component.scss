@@ -1,0 +1,33 @@
+@import "home.shared";
+
+
+#complete-profile-home {
+  h3 {
+    font-size: $font-size-base * $home-welcome-title-ratio;
+  }
+}
+
+#search-home {
+  #search-form {
+    margin-top: 32px;
+    .form-group:last-of-type {
+      margin-top: ($font-size-base * $line-height-base) + .5rem;    // .5rem is from bootstrap's reboot
+    }
+  }
+
+  #search-no-result {
+    font-weight: bold;
+  }
+
+  .search-results {
+    margin-top: map_get($spacers, 5);
+    h4 {
+      @include double-bottom-border;
+    }
+
+    .search-result-divider {
+      border-bottom: 1px dashed $gray-300;
+      padding-bottom: 12px;
+    }
+  }
+}

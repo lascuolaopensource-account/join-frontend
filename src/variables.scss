@@ -1,0 +1,93 @@
+@import "../node_modules/@sos/sos-ui-shared/scss/variables.scss";
+
+
+$font-family-base: HKGrotesk;
+$font-size-base: 1.5rem;
+
+$enable-shadows: false;
+$input-btn-focus-width: 0;
+$input-btn-focus-box-shadow: 0;
+
+$btn-border-width: 2px;
+
+$link-color:            black;
+$link-decoration:       none;
+$link-hover-color:      $yellow;
+$link-hover-decoration: none;
+
+$long-dash: '\2015';
+$navbar-toggler-icon: '\2025';
+$sos-skull: '\1e80';
+$sos-hearth: '\0395';
+$sos-bookmarks: '\0394';
+$sos-agree: '\0393';
+$sos-edit: '\0392';
+$sos-comment: '\0391';
+$sos-wish: '\2126';
+$left-arrow: '\2190';
+
+$navbar-z-index: 999999;
+
+
+@mixin double-bottom-border($elm: span, $arrow: true) {
+  margin-bottom: map_get($spacers, 3);
+  border-bottom: 1px solid black;
+  & > #{$elm} {
+    border-bottom: 1px solid black;
+    margin-bottom: 4px;
+    @if ($arrow) {
+      width: 100%;
+      display: block;
+      &:before {
+        content: $right-arrow;
+        margin-right: 8px;
+      }
+    }
+  }
+}
+
+
+@mixin padding-x($space) {
+  padding-left: $space;
+  padding-right: $space;
+}
+
+@mixin padding-y($space) {
+  padding-top: $space;
+  padding-bottom: $space;
+}
+
+@mixin margin-x($space) {
+  margin-left: $space;
+  margin-right: $space;
+}
+
+@mixin margin-y($space) {
+  margin-top: $space;
+  margin-bottom: $space;
+}
+
+
+@mixin no-gutters {
+  @include margin-x(0);
+  & > .col, & > [class*="col-"] {
+    @include padding-x(0);
+  }
+}
+
+@mixin yes-gutters {
+  @include margin-x($grid-gutter-width / 2);
+  & > .col, & > [class*="col-"] {
+    @include padding-x($grid-gutter-width / 2);
+  }
+}
+
+
+@mixin make-title-for-translated($elem: '.title') {
+  #{$elem} strong {
+    font-family: FreakGrotesk, sans-serif;
+  }
+}
+
+
+@import "~bootstrap/scss/mixins", "~bootstrap/scss/functions", "~bootstrap/scss/variables";

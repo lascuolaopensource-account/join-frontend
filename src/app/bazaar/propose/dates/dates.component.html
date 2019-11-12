@@ -1,0 +1,37 @@
+<div class="form-group">
+  <label>{{ 'bazaar.propose.dates' | translate }}</label>
+  <button type="button" class="btn btn-black ml-md-5" (click)="addDate()">
+    {{ 'bazaar.propose.dates.add' | translate }}
+  </button>
+</div>
+<div class="row" *ngFor="let date of dates; let i = index" [hidden]="date._delete">
+  <div class="form-group col-6 col-md-3">
+    <label for="idea-dates-date-{{ i }}">
+      {{ 'bazaar.propose.dates.date' | translate }}
+    </label>
+    <input type="date" class="form-control form-control-sm" required #dateElm="ngModel"
+           [(ngModel)]="date.dateString" [class.is-invalid]="dateElm.invalid"
+           id="idea-dates-date-{{ i }}" name="idea-dates-date-{{ i }}" (change)="fixDate(date)" />
+  </div>
+  <div class="form-group col-6 col-md-3">
+    <label for="idea-dates-start-{{ i }}">
+      {{ 'bazaar.propose.dates.startTime' | translate }}
+    </label>
+    <input type="time" class="form-control form-control-sm" required #startTime="ngModel"
+           [(ngModel)]="date.startTime" [class.is-invalid]="startTime.invalid"
+           id="idea-dates-start-{{ i }}" name="idea-dates-start-{{ i }}" />
+  </div>
+  <div class="form-group col-6 col-md-3">
+    <label for="idea-dates-end-{{ i }}">
+      {{ 'bazaar.propose.dates.endTime' | translate }}
+    </label>
+    <input type="time" class="form-control form-control-sm" required #endTime="ngModel"
+           [(ngModel)]="date.endTime" [class.is-invalid]="endTime.invalid"
+           id="idea-dates-end-{{ i }}" name="idea-dates-end-{{ i }}" />
+  </div>
+  <div class="form-group col-6 col-md-3 align-self-end">
+    <button type="button" class="btn btn-black" (click)="removeDate(i)">
+      {{ 'bazaar.propose.dates.remove' | translate }}
+    </button>
+  </div>
+</div>

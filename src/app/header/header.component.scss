@@ -1,0 +1,142 @@
+@import "../../variables";
+
+
+$navbar-elm-height: 1.5em;
+
+#navbar-login {
+  margin-top: -$navbar-elm-height / 2;
+}
+
+.navbar {
+  .navbar-brand {
+    font-family: FreakGrotesk, sans-serif;
+    font-size: $h1-font-size;
+    padding: 0;
+    height: $navbar-elm-height;
+    letter-spacing: -5px;
+  }
+  .navbar-sos-toggler {
+    border: none;
+    padding: 0;
+    font-size: $h1-font-size;
+    color: black;
+    height: $navbar-elm-height;
+    // this has to be here and not in the icon's :before to align toggler with brand
+    font-family: FreakGrotesk, sans-serif;
+    .navbar-toggler-icon {
+      height: auto;
+      width: auto;
+      background-image: none;
+      &:before {
+        content: $navbar-toggler-icon;
+      }
+    }
+    &:hover {
+      color: $yellow !important;
+    }
+  }
+}
+
+
+#main-navbar {
+  position: absolute;
+  z-index: $navbar-z-index;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  &, .navbar {
+    background-color: black;
+  }
+  color: white;
+  &.collapsing {
+    transition: none;
+    transition-duration: 0ms;
+  }
+  .container {
+    position: relative;
+    height: 100%;
+    & > .row {
+      position: absolute;
+      width: 100%;
+      top: 36%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      @include margin-x(0);
+    }
+  }
+  .navbar-sos-toggler {
+    &:not(:hover) {
+      color: white;
+    }
+    .navbar-toggler-icon {
+      &:before {
+        content: $sos-skull;
+      }
+    }
+  }
+  .navbar {
+    padding-bottom: 0;
+  }
+  .btn-link, a {
+    color: white;
+    font-weight: bold;
+  }
+  .nav-divider {
+    margin-bottom: map_get($spacers, 3);
+  }
+  .nav-item {
+    font-size: $font-size-sm;
+    &:before {
+      content: $right-arrow;
+      font-weight: bold;
+    }
+    &:hover {
+      a, .btn-link {
+        color: $yellow;
+      }
+      &:before {
+        color: $yellow;
+      }
+    }
+    a, .btn-link {
+      padding: 0;
+    }
+    &.active {
+      a, .btn-link, &:before {
+        color: $gray-800;
+      }
+    }
+  }
+}
+
+@include media-breakpoint-up(sm) {
+  #main-navbar {
+    .container > .row {
+      top: 30%;
+    }
+    .nav-divider {
+      margin-bottom: map_get($spacers, 5);
+    }
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  #main-navbar {
+    .navbar {
+      padding-bottom: map_get($spacers, 2);
+    }
+    .nav-item {
+      margin-bottom: map_get($spacers, 1);
+      font-size: $font-size-base;
+    }
+  }
+}
+
+#main-navbar, .navbar {
+  .navbar-brand {
+    &:hover {
+      color: $yellow;
+    }
+  }
+}

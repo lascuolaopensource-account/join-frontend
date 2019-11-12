@@ -1,0 +1,70 @@
+<div class="form-group mb-5">
+  <label for="idea-guest-search">{{ textTop | translate }}</label>
+  <div class="input-group">
+    <input type="text" class="form-control" (ngModelChange)="searchUser($event)" [(ngModel)]="searchingUser"
+           id="idea-guest-search" name="idea-guest-search"/>
+    <div class="input-group-append">
+      <button type="button" class="btn btn-black" [disabled]="!searchingUser || searchingUser.length < 2"
+              (click)="addGuest(searchingUser)">
+        {{ textAdd | translate }}
+        <small>{{ searchingUser }}</small>
+      </button>
+    </div>
+  </div>
+  <ul class="list-inline input-group-list" *ngIf="foundUsers && foundUsers.length > 0">
+    <li class="list-inline-item" *ngFor="let user of foundUsers">
+      <button type="button" class="btn btn-black" (click)="addGuest(user)">
+        {{ textAdd | translate }}
+        <small>{{ user.firstName }} {{ user.lastName }}</small>
+      </button>
+    </li>
+  </ul>
+
+  <div class="mt-3">
+    <label>{{ textBottom | translate }}</label>
+
+    <ul class="list-inline input-group-list" *ngIf="guests && guests.length > 0">
+      <li class="list-inline-item" *ngFor="let guest of guests; let iGuest = index" [hidden]="guest._delete">
+        <div class="input-group">
+          <span class="input-group-addon">{{ guest.firstName }} {{ guest.lastName }}</span>
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-black" (click)="removeGuest(iGuest, guests)">
+              <i class="sos-icon skull"></i></button>
+          </span>
+        </div>
+      </li>
+    </ul>
+
+    <div *ngFor="let customGuest of customGuests; let iCustom = index"
+         [hidden]="customGuest._delete">
+      <div class="form-row">
+        <div class="col-12 col-md-6 col-lg-3 form-group">
+          <label for="idea-guest-first">{{ 'bazaar.propose.guest.firstName' | translate }}</label>
+          <input type="text" class="form-control" required maxlength="255"
+                 [(ngModel)]="customGuest.firstName" [class.is-invalid]="firstName.invalid"
+                 #firstName="ngModel" id="idea-guest-first" name="idea-guest-first" />
+        </div>
+        <div class="col-12 col-md-6 col-lg-3 form-group">
+          <label for="idea-guest-last">{{ 'bazaar.propose.guest.lastName' | translate }}</label>
+          <input type="text" class="form-control" required maxlength="255"
+                 [(ngModel)]="customGuest.lastName" [class.is-invalid]="lastName.invalid"
+                 #lastName="ngModel" id="idea-guest-last" name="idea-guest-last" />
+        </div>
+        <div class="col-12 col-md-8 col-lg-4 form-group">
+          <label for="idea-guest-title">{{ 'bazaar.propose.guest.title' | translate }}</label>
+          <input type="text" class="form-control" required maxlength="255"
+                 [(ngModel)]="customGuest.title" [class.is-invalid]="title.invalid"
+                 #title="ngModel" id="idea-guest-title" name="idea-guest-title" />
+        </div>
+        <div class="col-12 col-md-4 col-lg-2 align-self-end text-right form-group">
+          <button type="button" class="btn btn-black" (click)="removeGuest(iCustom, customGuests)">
+            {{ 'bazaar.propose.guest.remove' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <p *ngIf="guestsLen === 0 && customGuestsLen === 0">{{ textEmpty | translate }}</p>
+
+  </div>
+</div>

@@ -1,0 +1,77 @@
+@import "../../variables";
+
+
+h1 {
+  font-family: FreakGrotesk, sans-serif;
+  text-align: center;
+  margin-bottom: map_get($spacers, 5);
+}
+
+#memberships {
+  @include padding-y(4px);
+  $border: 1px solid black;
+  &, & > * {
+    border-top: $border;
+    border-bottom: $border;
+  }
+}
+
+.membership {
+  @include padding-y(map_get($spacers, 5));
+  .title {
+    color: $magenta;
+    font-weight: bold;
+    font-size: x-large;
+    border-bottom: 1px solid black;
+    padding-bottom: map_get($spacers, 3);
+    margin-bottom: map_get($spacers, 3);
+    .price {
+      text-align: right;
+      span {
+        font-size: smaller;
+        font-weight: normal;
+      }
+    }
+  }
+  .bottom-controls {
+    border-top: 1px solid black;
+    padding-top: map_get($spacers, 3);
+    margin-top: map_get($spacers, 3);
+  }
+  .btn-link {
+    font-weight: bold;
+    &:before {
+      content: $right-arrow;
+    }
+  }
+  &.muted {
+    &, & .title {
+      color: $gray-500;
+    }
+  }
+}
+
+#memberships-bottom-text {
+  width: 60%;
+  font-size: x-large;
+  @include margin-y(map_get($spacers, 5));
+}
+#memberships-bottom-text ~ div.row {
+  font-weight: bold;
+}
+
+@include media-breakpoint-only(md) {
+  .membership {
+    .title {
+      font-size: large;
+    }
+  }
+}
+
+@include media-breakpoint-down(sm) {
+  .membership {
+    .features {
+      line-height: $font-size-sm + .2rem;
+    }
+  }
+}

@@ -1,0 +1,25 @@
+@import "../../variables";
+
+
+#sos-modal {
+  background-color: fade_out($yellow, .2);
+  color: white;
+  .modal-dialog {
+    margin-top: 6rem;
+  }
+  .modal-content {
+    background-color: black;
+  }
+  button.close {
+    color: white;
+    text-shadow: none;
+    opacity: 1;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    &:hover {
+      opacity: 1;
+      color: $yellow;
+    }
+  }
+}

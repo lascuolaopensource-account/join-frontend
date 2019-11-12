@@ -1,0 +1,108 @@
+<h1 class="title" [innerHTML]="'bazaar.heading' | translate"></h1>
+<h3 class="h5 subtitle">{{ 'bazaar.subhead' | translate }}</h3>
+
+<div class="row no-gutters" id="bazaar-filters">
+  <div class="col">
+    <div class="row align-items-center">
+      <div class="col-12 col-md-6 text-center text-md-left mb-1 mb-md-0 text-uppercase" id="framework-filter">
+        <ul class="list-inline">
+          <li class="list-inline-item" *ngFor="let filter of frameworksFilter; last as lst">
+            <span [class]="filter.filterClass" [class.active]="filter.selected"
+                  (click)="selectFramework(filter)">{{ filter.translation | translate }}</span>
+            <span *ngIf="!lst">/</span>
+          </li>
+        </ul>
+      </div>
+      <div class="col-6 col-md-3 col-lg-4 text-center text-md-right" id="mines-filter">
+        <ul class="list-inline">
+          <li class="list-inline-item">
+            <span [class.active]="showingMines" (click)="showMinesOnly()">
+              {{ 'bazaar.filters.mine.mines' | translate }}</span>
+            <span>/</span>
+          </li>
+          <li class="list-inline-item">
+            <span [class.active]="!showingMines" (click)="showAll()">
+              {{ 'bazaar.filters.mine.all' | translate }}</span>
+          </li>
+        </ul>
+      </div>
+      <div class="col-6 col-md-3 col-lg-2">
+        <button id="propose-btn" class="btn btn-block" (click)="showProposeModal()"
+           [innerHTML]="'bazaar.proposeBtn' | translate"></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row justify-content-center" id="bazaar-sorters">
+  <div class="col d-none d-sm-block"><hr></div>
+  <div class="col-12 col-sm-7 col-md-5 col-lg-4 col-xl-3">
+    <ul class="list-inline">
+      <li class="list-inline-item" *ngFor="let sorter of sorters; index as i; last as lst">
+        <span [class.active]="sorter.direction !== null" (click)="selectSorter(sorter, i)">
+          <i *ngIf="sorter.direction !== null" class="fa"
+             [class.fa-arrow-up]="sorter.direction === 'asc'"
+             [class.fa-arrow-down]="sorter.direction === 'desc'"></i>
+          {{ sorter.translation | translate }}
+        </span>
+        <span *ngIf="!lst">/</span>
+      </li>
+    </ul>
+  </div>
+  <div class="col d-none d-sm-block"><hr></div>
+</div>
+
+<div class="row fluid-content" id="bazaar-ideas">
+
+  <div class="col-12" [class.col-md-4]="selectedIdeaIndex !== null"
+       [class.idea-opened]="selectedIdeaIndex !== null">
+    <div class="row bazaar-idea"
+         *ngFor="let idea of filteredIdeas; index as i"
+         [class.opaque]="selectedIdeaIndex !== null && selectedIdeaIndex !== i"
+         [ngClass]="idea.ideaType" [hidden]="showingMines && idea.creator.id !== user.id">
+      <div class="col-9 col-xl-10">
+        <h6 class="text-uppercase">
+          <a [routerLink]="[idea.ideaType, idea.id]" [queryParams]="queryParams">
+            {{ idea.title }}
+          </a>
+        </h6>
+        <div class="row">
+          <div class="col-3 col-lg-2 score">{{ idea.score | number:'1.1-1' }}</div>
+          <div class="col-9 col-lg-10">
+            <div class="progress">
+              <div class="progress-bar" [ngStyle]="progressStyles[idea.ideaType][idea.id]"></div>
+            </div>
+          </div>
+        </div>
+        <ul class="list-inline list-inline-commas small">
+          <li class="list-inline-item mr-1" *ngFor="let topic of idea.topics">{{ topic.topic }}</li>
+        </ul>
+      </div>
+      <div class="col-3 col-xl-2">
+        <div class="right-bar">
+          <div class="text-uppercase">
+            <span class="long-framework" [ngClass]="idea.ideaType">
+              {{ 'bazaar.framework.' + idea.ideaType | translate }}</span>
+            <span class="short-framework" [ngClass]="idea.ideaType">
+              {{ 'bazaar.framework.' + idea.ideaType + '.short' | translate }}</span>
+          </div>
+          <div>
+            <sos-bazaar-favorite *ngIf="idea.creator.id !== user.id"
+                                 [idea]="idea" [fontSize]="'large'"></sos-bazaar-favorite>
+            <span>
+              <a *ngIf="idea.creator.id === user.id"
+                 [routerLink]="['propose', idea.ideaType, idea.id]">
+              <i class="sos-icon large edit"></i>
+            </a>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 col-md-8" [class.d-none]="selectedIdeaIndex === null">
+    <router-outlet></router-outlet>
+  </div>
+
+</div>

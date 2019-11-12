@@ -1,0 +1,15 @@
+@import "../../../../variables";
+
+
+#idea-comments {
+  .idea-comment {
+    border-top: 1px solid black;
+    &:last-of-type {
+      border-bottom: 1px solid black;
+    }
+    button.delete {
+      font-size: $font-size-sm;
+      padding: 0;
+    }
+  }
+}

@@ -1,0 +1,67 @@
+@import "../../../variables";
+
+
+.container-fluid {
+  @include padding-x(0);
+}
+@include media-breakpoint-up(md) {
+  .container-fluid {
+    @include padding-x($grid-gutter-width / 2);
+  }
+}
+@include media-breakpoint-up(lg) {
+  .container-fluid {
+    max-width: map_get($grid-breakpoints, lg);
+  }
+}
+
+.activity-title {
+  text-align: center;
+  font-family: FreakGrotesk, sans-serif;
+}
+
+.carousel-item {
+  & > div {
+    height: 300px;
+    width: 100%;
+    display: block;
+    background: no-repeat center;
+    background-size: 100%;
+  }
+}
+
+.bottom-border {
+  border-bottom: 1px solid black;
+  padding-bottom: map_get($spacers, 2);
+}
+
+#activity-bottom-bar {
+  @include padding-y(4px);
+  &, & > div {
+    border-top: 1px solid black;
+    border-bottom: 1px solid black;
+  }
+  & > div {
+    background-color: black;
+    font-weight: bold;
+    font-size: larger;
+    text-align: center;
+  }
+  #subscription-btn, #activity-donate-btn {
+    color: $magenta;
+  }
+  #favorite-btn {
+    color: $yellow;
+  }
+  #activity-contact-btn {
+    color: $cyan;
+  }
+  .btn-link {
+    color: inherit;
+    font-weight: inherit;
+    font-size: inherit;
+    i {
+      color: white;
+    }
+  }
+}

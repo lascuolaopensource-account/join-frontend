@@ -1,0 +1,99 @@
+<sos-bazaar-propose-saved *ngIf="showSavedComponent" [idea]="idea" [editing]="editing"
+                          (editIdea)="showSavedComponent = false"></sos-bazaar-propose-saved>
+
+<form *ngIf="!showSavedComponent" class="container px-0"
+      #proposeForm="ngForm" (ngSubmit)="submitIdea($event)" novalidate>
+
+  <h1 class="title text-center" [innerHTML]="'bazaar.propose.research.heading' | translate"></h1>
+  <h5 class="text-center mb-5" [innerHTML]="'bazaar.propose.research.subhead' | translate"></h5>
+
+  <sos-bazaar-propose-alerts [alerts]="alerts"></sos-bazaar-propose-alerts>
+
+  <div class="form-group">
+    <label for="idea-title">{{ 'bazaar.propose.title' | translate }}</label>
+    <input class="form-control" required maxlength="255"
+           #title="ngModel" [(ngModel)]="idea.title"
+           [class.is-invalid]="title.invalid" id="idea-title" name="idea-title" />
+  </div>
+
+  <sos-bazaar-propose-topics [topics]="idea.topics" [editing]="editing"
+                             (onInvalidUpdated)="invalidTopics = $event"></sos-bazaar-propose-topics>
+
+  <div class="form-group">
+    <label for="idea-organization">{{ 'bazaar.propose.organizationName' | translate }}</label>
+    <input class="form-control" maxlength="255"
+           #organizationName="ngModel" [(ngModel)]="idea.organizationName"
+           [class.is-invalid]="organizationName.invalid"
+           id="idea-organization" name="idea-organization" />
+  </div>
+
+  <div class="form-group">
+    <label for="idea-value">{{ 'bazaar.propose.research.valueDetails' | translate }}</label>
+    <textarea rows="10" class="form-control" required maxlength="2047"
+              #valueDetails="ngModel" [(ngModel)]="idea.valueDetails"
+              [class.is-invalid]="valueDetails.invalid"
+              id="idea-value" name="idea-value"></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="idea-motivation">{{ 'bazaar.propose.research.motivation' | translate }}</label>
+    <textarea rows="10" class="form-control" required maxlength="2047"
+              #motivation="ngModel" [(ngModel)]="idea.motivation"
+              [class.is-invalid]="motivation.invalid"
+              id="idea-motivation" name="idea-motivation"></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="idea-resources">{{ 'bazaar.propose.requiredResources' | translate }}</label>
+    <input class="form-control" required maxlength="511"
+           #requiredResources="ngModel" [(ngModel)]="idea.requiredResources"
+           [class.is-invalid]="requiredResources.invalid"
+           id="idea-resources" name="idea-resources" />
+  </div>
+
+  <div class="form-group" [class.text-danger]="invalidPositionsL">
+    <label>{{ 'bazaar.propose.positions' | translate }}</label>
+  </div>
+  <div class="form-row" *ngFor="let position of idea.positions; let iPos = index" [hidden]="position._delete">
+    <div class="form-group col-12 col-sm-3 col-lg-2">
+      <label for="position-people-{{iPos}}">{{ 'bazaar.propose.positions.people' | translate }}</label>
+      <input type="number" class="form-control" required min="1" #positionPeople="ngModel" [(ngModel)]="position.people"
+             [class.is-invalid]="positionPeople.invalid" id="position-people-{{iPos}}" name="position-people-{{iPos}}" />
+    </div>
+    <div class="form-group col-12 col-sm-9 col-lg-10">
+      <label for="field-skill-{{iPos}}">{{ 'bazaar.propose.positions.skills' | translate }}</label>
+      <input type="text" class="form-control" id="field-skill-{{iPos}}" [class.is-invalid]="invalidPositionsS[iPos]" />
+    </div>
+    <div class="form-group col-12 text-right">
+      <button type="button" class="btn btn-black btn-sm" (click)="removePosition(iPos)">
+        {{ 'bazaar.propose.positions.remove' | translate }}
+      </button>
+    </div>
+  </div>
+  <div class="form-group text-right">
+    <button type="button" class="btn btn-black btn-sm" (click)="addPosition()">
+      {{ 'bazaar.propose.positions.add' | translate }}
+    </button>
+  </div>
+
+  <div class="form-row">
+    <div class="col-6 form-group">
+      <label for="idea-deadline">{{ 'bazaar.propose.deadline' | translate }}</label>
+      <input class="form-control" #deadline="ngModel" [ngModel]="deadlineDate | date:'yyyy-MM-dd'"
+             (ngModelChange)="updateDeadline($event)" required [afterDate]="idea.createdAt"
+             [class.is-invalid]="deadline.invalid" type="date" id="idea-deadline" name="idea-deadline" />
+    </div>
+    <div class="col-6 form-group">
+      <label for="idea-duration">{{ 'bazaar.propose.duration' | translate }}</label>
+      <input class="form-control" #duration="ngModel" [(ngModel)]="idea.duration" required min="1" type="number"
+             [class.is-invalid]="duration.invalid" id="idea-duration" name="idea-duration" />
+    </div>
+  </div>
+
+  <div class="form-group mt-5 text-center">
+    <button class="btn btn-black" [disabled]="proposeForm.invalid || invalidTopics || invalidPositions">
+      {{ submitText | translate }}
+    </button>
+  </div>
+
+</form>

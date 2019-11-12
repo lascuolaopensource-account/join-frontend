@@ -1,0 +1,172 @@
+<sos-bazaar-propose-saved *ngIf="showSavedComponent" [idea]="idea" [editing]="editing"
+                          (editIdea)="showSavedComponent = false"></sos-bazaar-propose-saved>
+
+<form *ngIf="!showSavedComponent" class="container px-0"
+      #proposeForm="ngForm" (ngSubmit)="submitIdea($event)" novalidate>
+
+  <h1 class="title text-center" [innerHTML]="'bazaar.propose.teach.heading' | translate"></h1>
+  <h5 class="text-center mb-5" [innerHTML]="'bazaar.propose.teach.subhead' | translate"></h5>
+
+  <sos-bazaar-propose-alerts [alerts]="alerts"></sos-bazaar-propose-alerts>
+
+  <div class="form-group">
+    <label for="idea-title">{{ 'bazaar.propose.title' | translate }}</label>
+    <input type="text" class="form-control" required maxlength="255"
+           #title="ngModel" [(ngModel)]="idea.title"
+           [class.is-invalid]="title.invalid" id="idea-title" name="idea-title" />
+  </div>
+
+  <div class="form-group">
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" [(ngModel)]="locationSOSChecked"
+             (change)="locationAtSOS()" name="idea-location-sos" id="idea-location-sos" />
+      <label class="form-check-label" for="idea-location-sos">
+        {{ 'bazaar.propose.locationSOS' | translate }}</label>
+    </div>
+  </div>
+  <div class="form-group" *ngIf="!locationSOSChecked">
+    <label for="idea-location">{{ 'bazaar.propose.locationCustom' | translate }}</label>
+    <input type="text" class="form-control" required maxlength="511"
+           #customLocation="ngModel" [(ngModel)]="idea.location"
+           [class.is-invalid]="customLocation.invalid" id="idea-location" name="idea-location" />
+  </div>
+
+  <sos-bazaar-propose-topics [topics]="idea.topics" [editing]="editing"
+                             (onInvalidUpdated)="invalidTopics = $event"></sos-bazaar-propose-topics>
+
+  <div class="form-group">
+    <label for="idea-activity">{{ 'bazaar.propose.activityType' | translate }}</label>
+    <select class="form-control" required #activityType="ngModel" [(ngModel)]="idea.activityType"
+            [class.is-invalid]="activityType.invalid" id="idea-activity" name="idea-activity">
+      <option *ngFor="let activity of enumerateEnum(teachActivityTypes)" [value]="teachActivityTypes[activity]">
+        {{ translateEnum('teachActivity', activity) | translate }}
+      </option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>{{ 'bazaar.propose.audience' | translate }}</label>
+    <div class="row">
+      <div class="col-6 col-md-3" *ngFor="let audience of enumerateEnum(audienceTypes)">
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input"
+                 [checked]="idea.audience.indexOf(audienceTypes[audience]) !== -1"
+                 [value]="audienceTypes[audience]" #elm
+                 id="idea-audience-{{audience}}"
+                 (change)="changedAudience(audience, elm.checked)" />
+          <label class="form-check-label" for="idea-audience-{{audience}}">
+            {{ translateEnum('audience', audience) | translate }}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="idea-level">{{ 'bazaar.propose.level' | translate }}</label>
+    <select class="form-control" required #level="ngModel" [(ngModel)]="idea.level"
+            [class.is-invalid]="level.invalid" id="idea-level" name="idea-level">
+      <option *ngFor="let level of enumerateEnum(levels)" [value]="levels[level]">
+        {{ translateEnum('level', level) | translate }}
+      </option>
+    </select>
+  </div>
+
+  <sos-bazaar-propose-meetings [(meetings)]="idea.meetings" [editing]="editing"></sos-bazaar-propose-meetings>
+
+  <sos-bazaar-propose-dates [dates]="idea.dates" [editing]="editing"></sos-bazaar-propose-dates>
+
+  <div class="form-group">
+    <label for="idea-resources">
+      {{ 'bazaar.propose.requiredResources' | translate }}
+    </label>
+    <input type="text" class="form-control" maxlength="511"
+           [(ngModel)]="idea.requiredResources" id="idea-resources" name="idea-resources" />
+  </div>
+
+  <sos-bazaar-propose-guests [guests]="idea.teachers" [customGuests]="customTeachers" [editing]="editing"
+                             textAdd="bazaar.propose.teacher.add"
+                             textTop="bazaar.propose.teachers"
+                             textBottom="bazaar.propose.addedTeachers"
+                             textEmpty="bazaar.propose.teachers.none"></sos-bazaar-propose-guests>
+
+  <sos-bazaar-propose-guests [guests]="idea.tutors" [customGuests]="customTutors" [editing]="editing"
+                             textAdd="bazaar.propose.tutor.add"
+                             textTop="bazaar.propose.tutors"
+                             textBottom="bazaar.propose.addedTutors"
+                             textEmpty="bazaar.propose.tutors.none"></sos-bazaar-propose-guests>
+
+  <div class="form-group">
+    <label for="idea-participants">
+      {{ 'bazaar.propose.maxParticipants' | translate }}
+    </label>
+    <input type="number" min="1" required #maxParticipants="ngModel" class="form-control"
+           [(ngModel)]="idea.maxParticipants" [class.is-invalid]="maxParticipants.invalid"
+           id="idea-participants" name="idea-participants" />
+  </div>
+
+  <div class="form-group">
+    <label for="idea-program">{{ 'bazaar.propose.programDetails' | translate }}</label>
+    <textarea rows="10" class="form-control" required maxlength="2047"
+              #programDetails="ngModel" [(ngModel)]="idea.programDetails"
+              [class.is-invalid]="programDetails.invalid" id="idea-program" name="idea-program"></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="idea-meeting">{{ 'bazaar.propose.meetingDetails' | translate }}</label>
+    <textarea rows="10" class="form-control" required maxlength="2047"
+              #meetingDetails="ngModel" [(ngModel)]="idea.meetingDetails"
+              [class.is-invalid]="meetingDetails.invalid" id="idea-meeting" name="idea-meeting"></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="idea-output">{{ 'bazaar.propose.outputDetails' | translate }}</label>
+    <textarea rows="10" class="form-control" required maxlength="2047"
+              #outputDetails="ngModel" [(ngModel)]="idea.outputDetails"
+              [class.is-invalid]="outputDetails.invalid" id="idea-output" name="idea-output"></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="idea-value">{{ 'bazaar.propose.valueDetails' | translate }}</label>
+    <textarea rows="10" class="form-control" required maxlength="2047"
+              #valueDetails="ngModel" [(ngModel)]="idea.valueDetails"
+              [class.is-invalid]="valueDetails.invalid" id="idea-value" name="idea-value"></textarea>
+  </div>
+
+  <div class="form-group">
+    <label>{{ 'bazaar.propose.funding' | translate }}</label>
+    <div class="row">
+      <div class="col-6 col-md-3" *ngFor="let funding of enumerateEnum(fundingTypes)">
+        <div class="form-check">
+          <input type="checkbox" class="form-check-input"
+                 [checked]="idea.funding.indexOf(fundingTypes[funding]) !== -1"
+                 [value]="fundingTypes[funding]" #elm
+                 id="idea-funding-{{funding}}"
+                 (change)="changedFunding(funding, elm.checked)"
+                 [class.is-invalid]="idea.funding.length === 0" />
+          <label class="form-check-label" for="idea-funding-{{funding}}">
+            {{ translateEnum('funding', funding) | translate }}</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="idea-motivation">{{ 'bazaar.propose.motivation' | translate }}</label>
+    <textarea rows="10" class="form-control" required maxlength="2047"
+              #motivation="ngModel" [(ngModel)]="idea.motivation"
+              [class.is-invalid]="motivation.invalid" id="idea-motivation" name="idea-motivation"></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="idea-costs">{{ 'bazaar.propose.costs' | translate }}</label>
+    <textarea rows="10" class="form-control" maxlength="511"
+              [(ngModel)]="idea.costs" id="idea-costs" name="idea-costs"></textarea>
+  </div>
+
+  <div class="form-group mt-5 text-center">
+    <button type="submit" class="btn btn-black" [disabled]="proposeForm.invalid || invalidTopics">
+      {{ submitText | translate }}
+    </button>
+  </div>
+
+</form>

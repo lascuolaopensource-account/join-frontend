@@ -1,0 +1,51 @@
+<div class="row">
+  <div class="col-10">
+    <h4>{{ 'profile.reservations.title' | translate }}</h4>
+  </div>
+  <div class="col-2 text-right">
+    <button type="button" class="btn btn-sm btn-black" (click)="closeViaParent()">
+      <i class="sos-icon large skull"></i>
+    </button>
+  </div>
+</div>
+
+<table class="table table-responsive-sm table-hover mt-3">
+  <thead>
+  <tr>
+    <th>{{ 'profile.reservations.machine' | translate }}</th>
+    <th>{{ 'profile.reservations.operator' | translate }}</th>
+    <th>{{ 'profile.reservations.dates' | translate }}</th>
+    <th>{{ 'profile.reservations.totalPrice' | translate }}</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let reservation of reservations; index as i">
+    <td>{{ reservation.machine.name }}</td>
+    <td>{{ reservation.operator | translate }}</td>
+    <td>
+      <ul class="list-unstyled">
+        <li *ngFor="let date of reservation.times">
+          {{ date.date | date:'shortDate' }} {{ date.hour }} - {{ date.hour + 1 }}
+        </li>
+      </ul>
+    </td>
+    <td>{{ reservation.totalPrice | currency:'EUR':true }}</td>
+    <td>
+      <div *ngIf="!reservation.showDeletion">
+        <button type="button" class="btn btn-sm btn-black" (click)="askDeletion(i, true)">
+          <i class="fa fa-trash"></i>
+        </button>
+      </div>
+      <div *ngIf="reservation.showDeletion">
+        <button type="button" class="btn btn-sm btn-black" (click)="deleteReservation(i)">
+          <i class="fa fa-check"></i>
+        </button>
+        <button type="button" class="btn btn-sm btn-black" (click)="askDeletion(i, false)">
+          <i class="sos-icon skull"></i>
+        </button>
+      </div>
+    </td>
+  </tr>
+  </tbody>
+</table>

@@ -1,0 +1,75 @@
+<sos-bazaar-propose-saved *ngIf="showSavedComponent" [idea]="idea" [editing]="editing"
+                          (editIdea)="showSavedComponent = false"></sos-bazaar-propose-saved>
+
+<form *ngIf="!showSavedComponent" class="container px-0"
+      #proposeForm="ngForm" (ngSubmit)="submitIdea($event)" novalidate>
+
+  <h1 class="title text-center" [innerHTML]="'bazaar.propose.learn.heading' | translate"></h1>
+  <h5 class="text-center mb-5" [innerHTML]="'bazaar.propose.learn.subhead' | translate"></h5>
+
+  <sos-bazaar-propose-alerts [alerts]="alerts"></sos-bazaar-propose-alerts>
+
+  <div class="form-group">
+    <label for="idea-title">{{ 'bazaar.propose.title' | translate }}</label>
+    <input type="text" class="form-control" required maxlength="255"
+           #title="ngModel" [(ngModel)]="idea.title"
+           [class.is-invalid]="title.invalid" id="idea-title" name="idea-title" />
+  </div>
+
+  <div class="form-group">
+    <div class="form-check">
+      <input type="checkbox" class="form-check-input" [(ngModel)]="locationSOSChecked"
+             (change)="locationAtSOS()" name="idea-location-sos" id="idea-location-sos" />
+      <label class="form-check-label" for="idea-location-sos">
+        {{ 'bazaar.propose.locationSOS' | translate }}</label>
+    </div>
+  </div>
+  <div class="form-group" *ngIf="!locationSOSChecked">
+    <label for="idea-location">{{ 'bazaar.propose.locationCustom' | translate }}</label>
+    <input type="text" class="form-control" required maxlength="255"
+           #customLocation="ngModel" [(ngModel)]="idea.location"
+           [class.is-invalid]="customLocation.invalid" id="idea-location" name="idea-location" />
+  </div>
+
+  <sos-bazaar-propose-topics [topics]="idea.topics" [editing]="editing"
+                             (onInvalidUpdated)="invalidTopics = $event"></sos-bazaar-propose-topics>
+
+  <sos-bazaar-propose-guests [guests]="idea.teachers" [customGuests]="customTeachers" [editing]="editing"
+                             textAdd="bazaar.propose.teacher.add"
+                             textTop="bazaar.propose.teachers"
+                             textBottom="bazaar.propose.addedTeachers"
+                             textEmpty="bazaar.propose.teachers.none"></sos-bazaar-propose-guests>
+
+  <sos-bazaar-propose-guests [guests]="idea.tutors" [customGuests]="customTutors" [editing]="editing"
+                             textAdd="bazaar.propose.tutor.add"
+                             textTop="bazaar.propose.tutors"
+                             textBottom="bazaar.propose.addedTutors"
+                             textEmpty="bazaar.propose.tutors.none"></sos-bazaar-propose-guests>
+
+  <div class="form-group">
+    <label for="idea-value">{{ 'bazaar.propose.valueDetails' | translate }}</label>
+    <textarea rows="10" class="form-control" required maxlength="2047"
+              #valueDetails="ngModel" [(ngModel)]="idea.valueDetails"
+              [class.is-invalid]="valueDetails.invalid" id="idea-value" name="idea-value"></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="idea-motivation">{{ 'bazaar.propose.learn.motivation' | translate }}</label>
+    <textarea rows="10" class="form-control" required maxlength="2047"
+              #motivation="ngModel" [(ngModel)]="idea.motivation"
+              [class.is-invalid]="motivation.invalid" id="idea-motivation" name="idea-motivation"></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="idea-costs">{{ 'bazaar.propose.costs' | translate }}</label>
+    <textarea rows="10" class="form-control" maxlength="511"
+              [(ngModel)]="idea.costs" id="idea-costs" name="idea-costs"></textarea>
+  </div>
+
+  <div class="form-group text-center mt-5">
+    <button type="submit" class="btn btn-black" [disabled]="proposeForm.invalid || invalidTopics">
+      {{ submitText | translate }}
+    </button>
+  </div>
+
+</form>

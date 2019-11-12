@@ -1,0 +1,81 @@
+<nav class="navbar navbar-light" [ngStyle]="rootStyle">
+  <a class="navbar-brand" routerLink="home">
+    <span class="font-feat-a">S</span>
+    <span class="font-feat-a">O</span>
+    <span class="font-feat-a">S</span>
+  </a>
+  <button class="btn btn-black btn-sm ml-auto mr-3" id="navbar-login" type="button"
+          *ngIf="showLogin" (click)="clickLogin($event)"
+          [innerHTML]="'nav.login' | translate"></button>
+  <button class="btn btn-link navbar-sos-toggler" type="button"
+          data-toggle="collapse" data-target="#main-navbar"
+          aria-controls="main-navbar" aria-expanded="false"
+          aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+</nav>
+
+<div class="collapse navbar-collapse" id="main-navbar">
+  <nav class="navbar navbar-dark">
+    <a class="navbar-brand" routerLink="home">
+      <span class="font-feat-a">S</span>
+      <span class="font-feat-a">O</span>
+      <span class="font-feat-a">S</span>
+    </a>
+    <button class="btn btn-link navbar-sos-toggler" type="button"
+            data-toggle="collapse" data-target="#main-navbar"
+            aria-controls="main-navbar" aria-expanded="true"
+            aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </nav>
+  <div class="container">
+    <div class="row">
+      <div class="col-12 col-sm-7 col-md-8">
+        <div class="nav-item" routerLinkActive="active">
+          <a routerLink="profile/me">{{ 'nav.profile' | translate }}</a>
+        </div>
+        <div class="nav-item" routerLinkActive="active">
+          <a routerLink="favorites">{{ 'nav.favorites' | translate }}</a>
+        </div>
+        <div class="nav-item" routerLinkActive="active">
+          <a routerLink="bazaar">{{ 'nav.bazaar' | translate }}</a>
+        </div>
+        <div class="nav-item" routerLinkActive="active">
+          <a routerLink="activities">{{ 'nav.activities' | translate }}</a>
+        </div>
+        <div class="nav-item">
+          <a routerLink="bazaar" [queryParams]="{ propose: true }">
+            {{ 'nav.propose' | translate }}</a>
+        </div>
+        <div class="nav-item" routerLinkActive="active">
+          <a routerLink="fablab">{{ 'nav.fablab' | translate }}</a>
+        </div>
+        <div class="nav-item" routerLinkActive="active">
+          <a routerLink="membership">{{ 'nav.membership' | translate }}</a>
+        </div>
+        <div class="nav-item" routerLinkActive="active">
+          <a routerLink="home">{{ 'nav.home' | translate }}</a>
+        </div>
+      </div>
+      <div class="col-12 mt-3 col-sm-5 mt-sm-0 col-md-4">
+        <div *ngFor="let lang of supportedLanguages; let i = index"
+             class="nav-item" [class.active]="i === selectedLanguageId">
+          <button type="button" class="btn btn-link" (click)="changeLanguage(i)">
+            {{ 'nav.' + lang.code | translate }}
+          </button>
+        </div>
+        <div class="nav-divider"></div>
+        <div class="nav-item">
+          <a [href]="rulesUrl" target="_blank">{{ 'nav.rules' | translate }}</a>
+        </div>
+        <div class="nav-item">
+          <form hidden name="logout-form" method="post" [action]="logoutUrl"></form>
+          <button class="btn btn-link" (click)="doLogout($event)">
+            {{ 'nav.logout' | translate }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

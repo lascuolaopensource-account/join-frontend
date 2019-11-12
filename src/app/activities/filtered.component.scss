@@ -1,0 +1,15 @@
+@import "../../variables";
+
+
+.double-bottom-border {
+  text-align: center;
+  &, & > * {
+    border-bottom: 1px solid black;
+  }
+  & > *:before {
+    content: none;
+  }
+  h1 {
+    font-family: FreakGrotesk, sans-serif;
+  }
+}

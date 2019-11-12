@@ -1,0 +1,39 @@
+@import "../../../variables";
+
+
+.title {
+  font-weight: normal;
+}
+
+.form-control {
+  &, &:focus {
+    background-color: white;
+  }
+}
+
+label {
+  font-weight: bold;
+  &:before {
+    content: $right-arrow;
+    margin-right: 8px;
+  }
+}
+
+.form-check {
+  label:before {
+    content: none;
+  }
+}
+
+.input-group-list {
+  li {
+    .input-group-addon {
+      background-color: black;
+    }
+  }
+}
+
+.btn {
+  font-weight: bold;
+}
+

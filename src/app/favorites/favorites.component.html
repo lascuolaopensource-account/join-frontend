@@ -1,0 +1,29 @@
+<div class="row fluid-content">
+  <div class="col">
+    <h1 class="title" [innerHTML]="'favorites.heading' | translate"></h1>
+    <div class="row">
+
+      <div class="col-12 col-md-4">
+        <h4 class="sub-title"><span>{{ 'favorites.users' | translate }}</span></h4>
+        <div *ngFor="let u of users" class="favorite">
+          <sos-card-user [user]="u" [hideFavorite]="true"></sos-card-user>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <h4 class="sub-title"><span>{{ 'favorites.ideas' | translate }}</span></h4>
+        <div *ngFor="let idea of ideas" class="favorite">
+          <sos-card-idea [idea]="idea" [hideFavorite]="true"></sos-card-idea>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-4">
+        <h4 class="sub-title"><span>{{ 'favorites.activities' | translate }}</span></h4>
+        <div *ngFor="let activity of activities" class="favorite">
+          <sos-card-activity [activity]="activity" [hideFavorite]="true"></sos-card-activity>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

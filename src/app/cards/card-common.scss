@@ -1,0 +1,20 @@
+@import "../../variables";
+
+
+.title {
+  font-size: 1.4rem;
+  font-weight: bold;
+  line-height: 1.4rem;
+  span {
+    font-weight: normal;
+  }
+}
+
+.detail-line {
+  font-size: 14px;
+  line-height: 18px;
+  & > [class^='col']:first-of-type {
+    @include text-truncate;
+    margin-right: 4px;
+  }
+}

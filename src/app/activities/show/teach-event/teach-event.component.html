@@ -1,0 +1,326 @@
+<div class="container-fluid">
+
+  <h1 class="activity-title">{{ activity.title }}</h1>
+
+  <div class="row my-3 my-md-5">
+    <div class="col">
+      <div class="carousel slide">
+        <div class="carousel-inner">
+          <div class="carousel-item active">
+            <div [style.background-image]="'url('+activity.coverPic.url+')'"></div>
+          </div>
+          <div class="carousel-item" *ngFor="let image of activity.gallery.images">
+            <div [style.background-image]="'url('+image.url+')'"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+
+    <div class="col-12 col-sm-4" id="activity-details-left">
+      <div>
+        {{ 'activity.teachEvent.activityType' | translate }}
+        <div class="text-uppercase">
+          {{ translateActivityActivityType(activity) | translate }}
+        </div>
+      </div>
+      <div *ngIf="activity.level != null" class="top-border">
+        {{ 'activity.teachEvent.level' | translate }}
+        <div class="text-uppercase">
+          {{ translateEnum('level', levels[activity.level]) | translate }}
+        </div>
+      </div>
+      <div class="top-border">
+        {{ 'activity.teachEvent.costs' | translate }}
+        <div *ngIf="activity.costs > 0">{{ activity.costs | currency:'EUR':true }}</div>
+        <div *ngIf="activity.costs == null">{{ 'activity.teachEvent.costsFree' | translate }}</div>
+      </div>
+    </div>
+
+    <div class="col-12 col-sm-8">
+      <div class="row" id="activity-details-right">
+
+        <div class="col-12 col-lg-6">
+          <div class="row no-gutters top-border top-border-md-no">
+            <div class="col-2">{{ 'activity.teachEvent.dates' | translate }}</div>
+            <div class="col-10">
+              <ul class="list-unstyled mb-0">
+                <li *ngFor="let date of activity.dates">
+                  {{ date.date | date:'longDate' }}
+                  {{ date.startTime | date:'shortTime' }} / {{ date.endTime | date:'shortTime' }}
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="font-weight-bold top-border">
+            <div *ngIf="isRecurring">
+              {{ activity.schedule.days }}
+              <span *ngIf="activity.schedule.days > 1">{{ 'util.schedule.days' | translate }}</span>
+              <span *ngIf="activity.schedule.days === 1">{{ 'util.schedule.day' | translate }}</span>
+              {{ activity.schedule.hours }}
+              <span *ngIf="activity.schedule.hours > 1">{{ 'util.schedule.hours' | translate }}</span>
+              <span *ngIf="activity.schedule.hours === 1">{{ 'util.schedule.hour' | translate }}</span>
+              {{ 'util.schedule.recurring.every' | translate }}
+              <span *ngIf="activity.schedule.every > 1">{{ activity.schedule.every }}</span>
+              <span *ngIf="activity.schedule.entity == 0 && activity.schedule.every > 1">
+                {{ 'util.schedule.recurring.weeks' | translate }}
+              </span>
+              <span *ngIf="activity.schedule.entity == 0 && activity.schedule.every === 1">
+                {{ 'util.schedule.recurring.week' | translate }}
+              </span>
+              <span *ngIf="activity.schedule.entity == 1 && activity.schedule.every > 1">
+                {{ 'util.schedule.recurring.months' | translate }}
+              </span>
+              <span *ngIf="activity.schedule.entity == 1 && activity.schedule.every === 1">
+                {{ 'util.schedule.recurring.month' | translate }}
+              </span>
+              <span *ngIf="activity.schedule.entity == 2 && activity.schedule.every > 1">
+                {{ 'util.schedule.recurring.years' | translate }}
+              </span>
+              <span *ngIf="activity.schedule.entity == 2 && activity.schedule.every === 1">
+                {{ 'util.schedule.recurring.year' | translate }}
+              </span>
+            </div>
+            <div *ngIf="!isRecurring">
+              {{ activity.schedule.totalDays }}
+              <span *ngIf="activity.schedule.totalDays === 1">
+                {{ 'util.schedule.day' | translate }}
+                {{ 'util.schedule.for' | translate }}
+              </span>
+              <span *ngIf="activity.schedule.totalDays !== 1">
+                {{ 'util.schedule.days' | translate }}
+                {{ 'util.schedule.forTotal' | translate }}
+              </span>
+              {{ activity.schedule.totalHours }}
+              <span *ngIf="activity.schedule.totalHours > 1">{{ 'util.schedule.hours' | translate }}</span>
+              <span *ngIf="activity.schedule.totalHours <= 1">{{ 'util.schedule.hour' | translate }}</span>
+            </div>
+          </div>
+          <div *ngIf="activity.deadline" class="row no-gutters top-border">
+            <div class="col-6">{{ 'activity.teachEvent.deadline' | translate }}</div>
+            <div class="col">{{ activity.deadline | date:'longDate' }}</div>
+          </div>
+          <div *ngIf="activity.minParticipants != null || activity.maxParticipants != null" class="top-border">
+            <div *ngIf="activity.minParticipants != null" class="row no-gutters">
+              <div class="col-6">{{ 'activity.teachEvent.minParticipants' | translate }}</div>
+              <div class="col">{{ activity.minParticipants }}</div>
+            </div>
+            <div *ngIf="activity.maxParticipants != null" class="row no-gutters">
+              <div class="col-6">{{ 'activity.teachEvent.maxParticipants' | translate }}</div>
+              <div class="col">{{ activity.maxParticipants }}</div>
+            </div>
+          </div>
+          <div *ngIf="activity.subscriptions != null" class="row no-gutters top-border">
+            <div class="col-6">{{ 'activity.teachEvent.subscriptions' | translate }}</div>
+            <div class="col">
+              <span class="text-magenta">{{ activity.subscriptions }}</span>
+              <span *ngIf="activity.minParticipants != null">
+                / {{ activity.minParticipants }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-12 col-lg-6">
+          <div class="row no-gutters top-border top-border-lg-no">
+            <div class="col-3">{{ 'activity.teachEvent.topics' | translate }}</div>
+            <div class="col">
+              <ul class="list-inline list-inline-commas mb-0">
+                <li class="list-inline-item" *ngFor="let t of activity.topics">
+                  {{ t.topic }}</li>
+              </ul>
+            </div>
+          </div>
+          <div class="row no-gutters top-border"
+               *ngIf="activity.requiredSkills && activity.requiredSkills.length > 0">
+            <div class="col-12">{{ 'activity.teachEvent.requiredSkills' | translate }}</div>
+            <div class="col-12">
+              <ul class="list-inline list-inline-commas mb-0">
+                <li class="list-inline-item" *ngFor="let s of activity.requiredSkills">
+                  {{ s.name }}</li>
+              </ul>
+            </div>
+          </div>
+          <div class="row no-gutters top-border"
+               *ngIf="activity.acquiredSkills && activity.acquiredSkills.length > 0">
+            <div class="col-12">{{ 'activity.teachEvent.acquiredSkills' | translate }}</div>
+            <div class="col-12">
+              <ul class="list-inline list-inline-commas mb-0">
+                <li class="list-inline-item" *ngFor="let s of activity.acquiredSkills">
+                  {{ s.name }}</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <div id="activity-guests-row" class="my-5">
+    <div>
+      <p>{{ guestsTxt | translate }}</p>
+      <div class="row">
+        <div class="col-12 col-sm-6 guest" *ngFor="let g of activity.guests">
+          <h5 class="text-uppercase bottom-border">
+            <a *ngIf="g.userId != null" [routerLink]="['/profile', g.userId]">
+              {{ g.firstName }} {{ g.lastName }}</a>
+            <span *ngIf="g.userId == null">{{ g.firstName }} {{ g.lastName }}</span>
+          </h5>
+          <p>{{ g.bio }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-5 activity-description">
+    <div class="col-12 col-sm-6">
+      <h5 class="text-uppercase bottom-border">
+        {{ 'activity.teachEvent.description' | translate }}</h5>
+      <p>{{ activity.description }}</p>
+      <h5 *ngIf="outputDescription" class="text-uppercase bottom-border mt-5">
+        {{ 'activity.teachEvent.outputDescription' | translate }}</h5>
+      <p *ngIf="outputDescription">{{ outputDescription }}</p>
+    </div>
+    <div class="col-12 col-sm-6 mt-5 mt-sm-0">
+      <h5 class="text-uppercase bottom-border">
+        {{ 'activity.teachEvent.program' | translate }}</h5>
+      <p>{{ activity.program }}</p>
+    </div>
+  </div>
+
+  <div class="mt-5 activity-subscribe" *ngIf="canSubscribe" [hidden]="!showPaymentOptions">
+    <div class="row justify-content-center">
+      <div class="col-12 col-sm-3 mb-3 mb-sm-0 text-center">
+        <button type="button" class="btn btn-black" (click)="clickPayPal()"
+                [disabled]="sendingPaypal || disabledSubmitCredit || disabledSubmitWire">
+          {{ 'activity.teachEvent.paypal' | translate }}
+        </button>
+      </div>
+      <div class="col-12 col-sm-3 mb-3 mb-sm-0 text-center">
+        <button type="button" class="btn btn-black" (click)="clickShowCreditCard()"
+                [disabled]="sendingPaypal || disabledSubmitCredit || disabledSubmitWire">
+          {{ 'activity.teachEvent.credit' | translate }}
+        </button>
+      </div>
+      <div class="col-12 col-sm-3 mb-3 mb-sm-0 text-center">
+        <button type="button" class="btn btn-black" (click)="clickShowWireTransfer()"
+                [disabled]="sendingPaypal || disabledSubmitCredit || disabledSubmitWire">
+          {{ 'activity.teachEvent.wire' | translate }}
+        </button>
+      </div>
+    </div>
+
+    <div class="row mt-5">
+      <div class="col" id="credit-card-box" [hidden]="!showCreditCard">
+        <form (submit)="submitCreditCard($event)">
+          <div *ngIf="creditCardAlerts && creditCardAlerts.length > 0"
+               class="alert alert-dismissible alert-danger fade show" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <ul class="list-unstyled">
+              <li *ngFor="let alert of creditCardAlerts">{{ alert | translate }}</li>
+            </ul>
+          </div>
+          <div class="form-row">
+            <div class=" col-9 form-group">
+              <label for="card-number">{{ 'activity.teachEvent.credit.number' | translate }}</label>
+              <div id="card-number"></div>
+            </div>
+            <div class="col-3 align-self-center" id="card-type" *ngIf="creditCardType.niceType">
+              <span class="badge badge-info">{{ creditCardType.niceType }}</span>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group col-6">
+              <label for="cvv">{{ 'activity.teachEvent.credit.cvv' | translate }}</label>
+              <div id="cvv"></div>
+            </div>
+            <div class="form-group col-6">
+              <label for="expiration-date">{{ 'activity.teachEvent.credit.expirationDate' | translate }}</label>
+              <div id="expiration-date"></div>
+            </div>
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-black" [disabled]="disabledSubmitCredit">
+              {{ 'activity.teachEvent.credit.submit' | translate }}
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div class="col" id="wire-transfer-box" [hidden]="!showWireTransfer">
+        <form #wireForm="ngForm" (submit)="submitWireTransfer($event)">
+          <div class="alert alert-info" [innerHTML]="'activity.teachEvent.wire.alert' | translate"></div>
+          <div class="form-group">
+            <label for="payment-cro">{{ 'activity.teachEvent.wire.cro' | translate }}</label>
+            <input type="text" class="form-control" #cro="ngModel" [(ngModel)]="croModel" required
+                   [class.is-invalid]="cro.invalid" id="payment-cro" name="payment-cro" />
+          </div>
+          <div class="form-group">
+            <button type="submit" class="btn btn-black" [disabled]="wireForm.invalid || disabledSubmitWire">
+              {{ 'activity.teachEvent.wire.submit' | translate }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-5 activity-subscription" *ngIf="activity.subscription !== null">
+    <div class="col">
+      <div class="alert alert-info mt-3" *ngIf="showSubConfirmation">
+        <div [innerHTML]="'activity.teachEvent.subscription.confirmed.payed' | translate"
+             *ngIf="activity.costs"></div>
+        <div [innerHTML]="'activity.teachEvent.subscription.confirmed' | translate"
+             *ngIf="!activity.costs"></div>
+      </div>
+      <p class="mt-3 px-5 h5" [innerHTML]="'activity.teachEvent.subscription.title' | translate"></p>
+      <ul class="list-unstyled mt-3 px-5">
+        <li>
+          {{ 'activity.teachEvent.subscription.date' | translate }}
+          <b>{{ activity.subscription.createdAt | date:'shortDate' }}</b>
+        </li>
+        <li *ngIf="activity.subscription.paymentMethod">
+          {{ 'activity.teachEvent.subscription.paymentMethod' | translate }}
+          <b>{{ translatePaymentMethod(activity.subscription.paymentMethod) | translate }}</b>
+          <span *ngIf="activity.subscription.verified != null">
+            &nbsp;
+            <i *ngIf="!activity.subscription.verified" class="fa fa-times"
+               [title]="'activity.teachEvent.subscription.verifiedFalse' | translate"></i>
+            <i *ngIf="activity.subscription.verified" class="fa fa-check"
+               [title]="'activity.teachEvent.subscription.verified' | translate"></i>
+          </span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="activity-bottom-bar" class="mt-5">
+    <div class="row no-gutters">
+      <div class="col" id="activity-contact-btn">
+        <a target="_blank" [href]="contactLink" class="btn btn-link">
+          <i class="sos-icon comment"></i> {{ contactLinkTxt | translate }}
+        </a>
+      </div>
+      <div class="col" id="subscription-btn" *ngIf="!showPaymentOptions && !showCreditCard">
+        <button type="button" class="btn btn-link"
+                (click)="clickSubscribe()" [disabled]="disableSubscribeBtn">
+          <i class="sos-icon edit"></i> {{ 'activity.teachEvent.subscribe' | translate }}</button>
+      </div>
+      <div class="col" id="favorite-btn">
+        <button type="button" class="btn btn-link" (click)="changeFavorite($event)">
+          <span *ngIf="activity.favorite">
+            <i class="fa fa-heart"></i> {{ 'activity.favorite.remove' | translate }}</span>
+          <span *ngIf="!activity.favorite">
+            <i class="fa fa-heart-o"></i> {{ 'activity.favorite.add' | translate }}</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,81 @@
+@import "../show-common";
+
+
+.top-border {
+  border-top: 1px solid $yellow;
+}
+@include media-breakpoint-up(md) {
+  .top-border-md-no {
+    border-top: 0;
+  }
+}
+@include media-breakpoint-up(lg) {
+  .top-border-lg-no {
+    border-top: 0;
+  }
+}
+
+#activity-details-left {
+  font-weight: bold;
+}
+
+#activity-details-right {
+  & .row > :first-of-type {
+    font-weight: bold;
+  }
+}
+
+#activity-details-left > div, #activity-details-right > div > div {
+  @include padding-y(map_get($spacers, 1));
+}
+
+#activity-guests-row {
+  @include padding-y(4px);
+  $border: 1px solid black;
+  &, & > div {
+    border-top: $border;
+    border-bottom: $border;
+  }
+  & > div {
+    @include padding-y(map_get($spacers, 3));
+    & > p {
+      font-size: smaller;
+    }
+  }
+}
+
+#activity-details-right, #activity-guests-row, .activity-description {
+  font-size: 1rem;
+}
+
+.activity-subscribe {
+  #credit-card-box, #wire-transfer-box {
+    padding: 30px 30px 10px 30px;
+    label {
+      font-weight: bold;
+    }
+  }
+
+  #card-number, #cvv, #expiration-date {
+    height: 50px;
+    padding: 0 20px;
+    border: 2px solid black;
+    &.braintree-hosted-fields-invalid {
+      border-color: $red;
+    }
+    &.braintree-hosted-fields-valid {
+      border-color: $acid-green;
+    }
+  }
+
+  #card-type {
+    font-size: x-large;
+    text-align: center;
+  }
+}
+
+.activity-subscription {
+  & > * {
+    padding: 30px 30px 10px 30px;
+  }
+}

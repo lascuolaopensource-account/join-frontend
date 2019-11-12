@@ -1,0 +1,31 @@
+@import "../../variables";
+
+
+.title {
+  text-align: center;
+  font-weight: normal;
+  margin-bottom: map_get($spacers, 4);
+  strong {
+    font-family: FreakGrotesk, sans-serif;
+    font-weight: bold;
+  }
+}
+
+.sub-title {
+  @include double-bottom-border;
+}
+
+@include media-breakpoint-down(sm) {
+  .sub-title {
+    margin-top: map_get($spacers, 3);
+  }
+}
+
+.favorite {
+  $padding-y: map_get($spacers, 3);
+  padding-top: $padding-y;
+  padding-bottom: $padding-y;
+  &:not(:first-of-type) {
+    border-top: 1px dashed $gray-300;
+  }
+}

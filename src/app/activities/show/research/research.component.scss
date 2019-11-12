@@ -1,0 +1,46 @@
+@import "../show-common";
+
+
+#activity-details-row, #activity-content-row {
+  @include double-bottom-border(div, false);
+}
+
+#activity-details-row {
+  & > div {
+    & > [class^="col"] {
+      font-size: $h6-font-size;
+      font-weight: bold;
+      & > *:first-of-type {
+        font-size: 1rem;
+      }
+    }
+  }
+}
+
+#activity-content-row {
+  & > div {
+    @include padding-y(map_get($spacers, 3));
+    p {
+      font-size: 1rem;
+    }
+  }
+}
+
+#activity-team .team-member,
+#activity-roles .activity-role {
+  border-top: 1px solid black;
+  font-size: 1rem;
+  @include padding-y(map_get($spacers, 1));
+}
+
+#activity-roles .activity-role {
+  .activity-role-details {
+    font-weight: bold;
+    .apply-btns {
+      text-align: right;
+      .btn {
+        font-size: $font-size-sm - .5rem;
+      }
+    }
+  }
+}

@@ -1,0 +1,92 @@
+<div class="form-group">
+  <label>{{ 'bazaar.propose.meetings' | translate }}</label>
+  <div>
+    <div class="form-check form-check-inline">
+      <input type="radio" class="form-check-input" required [(ngModel)]="isFixedDays" [value]="true" (change)="changeMeetingsType()"
+             #ideaMeetingsFixed="ngModel" [class.is-invalid]="ideaMeetingsFixed.invalid"
+             name="idea-meetings" id="idea-meetings-fixed" value="fixed-days">
+      <label class="form-check-label" for="idea-meetings-fixed">
+        {{ 'bazaar.propose.fixedDays' | translate }}</label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input type="radio" class="form-check-input" required [(ngModel)]="isFixedDays" [value]="false" (change)="changeMeetingsType()"
+             #ideaMeetingsFixed="ngModel" [class.is-invalid]="ideaMeetingsFixed.invalid"
+             name="idea-meetings" id="idea-meetings-recurring" value="recurring">
+      <label class="form-check-label" for="idea-meetings-recurring">
+        {{ 'bazaar.propose.recurring' | translate }}</label>
+    </div>
+  </div>
+</div>
+<fieldset class="form-group" *ngIf="isFixedDays !== null && isFixedDays">
+  <button type="button" class="btn btn-black mb-2" (click)="addDaysSchedule()">
+    {{ 'bazaar.propose.fixedDays.add' | translate }}
+  </button>
+  <div class="row" *ngFor="let schedule of meetings.schedules; let i = index" [hidden]="schedule._delete">
+    <div class="form-group col-6 col-md-4">
+      <label for="idea-meeting-fixed-days-{{ i }}">
+        {{ 'bazaar.propose.fixedDays.days' | translate }}
+      </label>
+      <input type="number" min="1" required class="form-control" [(ngModel)]="schedule.numberDays"
+             #fixedDays="ngModel" [class.is-invalid]="fixedDays.invalid"
+             id="idea-meeting-fixed-days-{{ i }}" name="idea-meeting-fixed-days-{{ i }}" />
+    </div>
+    <div class="form-group col-6 col-md-4">
+      <label for="idea-meeting-fixed-hours-{{ i }}">
+        {{ 'bazaar.propose.fixedDays.hours' | translate }}
+      </label>
+      <input type="number" min="1" required class="form-control" [(ngModel)]="schedule.numberHours"
+             #fixedHours="ngModel" [class.is-invalid]="fixedHours.invalid"
+             id="idea-meeting-fixed-hours-{{ i }}" name="idea-meeting-fixed-hours-{{ i }}" />
+    </div>
+    <div class="form-group col-12 col-md-4 text-right align-self-end">
+      <button type="button" class="btn btn-black" (click)="removeDaysSchedule(i)">
+        {{ 'bazaar.propose.fixedDays.remove' | translate }}
+      </button>
+    </div>
+  </div>
+</fieldset>
+<fieldset *ngIf="isFixedDays !== null && !isFixedDays">
+  <div class="form-group row">
+    <div class="h-100 col-6 col-md-3">
+      <label for="idea-meeting-recurring-hours">
+        {{ 'bazaar.propose.recurring.hours' | translate }}
+      </label>
+      <input type="number" min="1" required class="form-control" [(ngModel)]="meetings.hours"
+             #recurringHours="ngModel" [class.is-invalid]="recurringHours.invalid"
+             id="idea-meeting-recurring-hours" name="idea-meeting-recurring-hours" />
+    </div>
+    <div class="h-100 col-6 col-md-3">
+      <label for="idea-meeting-recurring-days">
+        {{ 'bazaar.propose.recurring.days' | translate }}
+      </label>
+      <input type="number" min="1" required class="form-control" [(ngModel)]="meetings.days"
+             #recurringDays="ngModel" [class.is-invalid]="recurringDays.invalid"
+             id="idea-meeting-recurring-days" name="idea-meeting-recurring-days" />
+    </div>
+    <div class="h-100 col-6 col-md-3 mt-2 mt-md-0">
+      <label for="idea-meeting-recurring-every">
+        {{ 'bazaar.propose.recurring.every' | translate }}
+      </label>
+      <input type="number" min="1" required class="form-control" [(ngModel)]="meetings.every"
+             #recurringEvery="ngModel" [class.is-invalid]="recurringEvery.invalid"
+             id="idea-meeting-recurring-every" name="idea-meeting-recurring-every" />
+    </div>
+    <div class="h-100 col-6 col-md-3 mt-2 mt-md-0">
+      <label for="idea-meeting-recurring-entity">
+        {{ 'bazaar.propose.recurring.entity' | translate }}
+      </label>
+      <select class="form-control" required #recurringEntity="ngModel" [(ngModel)]="meetings.entity"
+              [class.is-invalid]="recurringEntity.invalid"
+              id="idea-meeting-recurring-entity" name="idea-meeting-recurring-entity">
+        <option *ngFor="let entity of enumerateEnum(recurringEntities)" [value]="recurringEntities[entity]">
+          {{ translateEnum('recurringEntity', entity) | translate }}
+        </option>
+      </select>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <sos-bazaar-meetings-display [meetings]="meetings"></sos-bazaar-meetings-display>
+    </div>
+  </div>
+</fieldset>

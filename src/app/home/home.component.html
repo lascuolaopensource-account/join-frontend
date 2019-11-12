@@ -1,0 +1,69 @@
+<div class="container mt-5">
+
+  <router-outlet (activate)="onRouterOutletActivate()"></router-outlet>
+
+  <div id="complete-profile-home" class="mb-5" *ngIf="showCompleteProfile">
+    <h3>{{ 'home.complete.profile.txt' | translate }}</h3>
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <a routerLink="/profile/me" [queryParams]="{ edit: true }"
+           class="font-weight-bold"
+           [innerHTML]="'home.complete.profile.btn.profile' | translate"></a>
+      </div>
+      <div class="col-12 col-md-6 text-md-right">
+        <a routerLink="/membership"
+           class="font-weight-bold"
+           [innerHTML]="'home.complete.profile.btn.member' | translate"></a>
+      </div>
+    </div>
+  </div>
+
+  <div id="search-home">
+    <form id="search-form" (submit)="navigateSearch($event)">
+      <div class="form-row">
+        <div class="col-12 col-md-5 form-group">
+          <label [innerHTML]="'home.search.value' | translate" for="search-input"></label>
+          <input class="form-control form-control-sm" name="search" id="search-input"
+                 [(ngModel)]="search.value" (ngModelChange)="setValidSearch()" />
+        </div>
+        <div class="col-12 col-md-5 form-group">
+          <label [innerHTML]="'home.search.skills' | translate" for="search-skill"></label>
+          <input class="form-control form-control-sm" id="search-skill" />
+        </div>
+        <div class="col-12 col-md-2 form-group">
+          <button type="submit" class="btn btn-black btn-sm btn-block text-upper-bold" [disabled]="!validSearch">
+            {{ 'home.search.btn' | translate }}</button>
+        </div>
+      </div>
+    </form>
+
+    <div *ngIf="showNoResults" id="search-no-result">
+      {{ 'home.search.noResult' | translate }}
+    </div>
+
+    <div class="search-results" *ngIf="foundUsers && foundUsers.length > 0">
+      <h4><span>{{ 'home.search.users' | translate }}</span></h4>
+      <div class="mb-2" *ngFor="let user of foundUsers; last as lst"
+           [class.search-result-divider]="!lst">
+        <sos-card-user [user]="user"></sos-card-user>
+      </div>
+    </div>
+
+    <div class="search-results" *ngIf="foundIdeas && foundIdeas.length > 0">
+      <h4><span>{{ 'home.search.ideas' | translate }}</span></h4>
+      <div class="mb-2" *ngFor="let idea of foundIdeas; last as lst"
+           [class.search-result-divider]="!lst">
+        <sos-card-idea [idea]="idea"></sos-card-idea>
+      </div>
+    </div>
+
+    <div class="search-results" *ngIf="foundActivities && foundActivities.length > 0">
+      <h4><span>{{ 'home.search.activities' | translate }}</span></h4>
+      <div class="mb-2" *ngFor="let activity of foundActivities; last as lst"
+           [class.search-result-divider]="!lst">
+        <sos-card-activity [activity]="activity"></sos-card-activity>
+      </div>
+    </div>
+  </div>
+
+</div>

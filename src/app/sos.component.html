@@ -1,0 +1,17 @@
+<sos-header [supportedLanguages]="supportedLanguages"
+            [selectedLanguageId]="selectedLanguageId"
+            (onLangChanged)="changeLanguage($event)"
+            [user]="user">
+  Loading header...
+</sos-header>
+
+<main class="container-fluid" id="main-content">
+  <div class="row">
+    <div class="col">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</main>
+
+<sos-modal></sos-modal>
+<sos-loading></sos-loading>

@@ -1,0 +1,21 @@
+@import "../../variables";
+
+
+.title {
+  line-height: 1;
+  font-size: $h5-font-size;
+}
+
+.favorite-btn {
+  line-height: 1;
+  padding: 0;
+  margin-bottom: .5rem;   // from bootstrap's reboot
+}
+
+.detail-line {
+  border-top: 1px solid $cyan;
+  font-size: small;
+  & > div:first-of-type {
+    font-weight: bold;
+  }
+}

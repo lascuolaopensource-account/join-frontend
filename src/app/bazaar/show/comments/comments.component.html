@@ -1,0 +1,49 @@
+<div class="row" #commentsCard>
+  <div class="col">
+
+    <h3>{{ 'bazaar.comments.title' | translate }}</h3>
+
+    <div id="idea-comments" class="row">
+      <div class="col-12 idea-comment py-2" *ngFor="let comment of comments; let iComment = index">
+        <div class="row no-gutters">
+          <div class="col-9">
+            <a [routerLink]="['/profile', comment.userId]"
+               class="h6 mb-0">{{ comment.firstName }} {{ comment.lastName }}</a>
+          </div>
+          <div class="col-2 text-right">
+            <span *ngIf="preference.wish && preference.wish.id === comment.id">
+              <i class="sos-icon wish"></i>
+            </span>
+          </div>
+          <div class="col-1 text-right">
+            <button type="button" class="btn btn-link btn-sm delete" *ngIf="comment.userId === preference.userId" (click)="deleteComment(comment, iComment)">
+              <i class="sos-icon skull"></i>
+            </button>
+          </div>
+        </div>
+        <div>{{ comment.comment }}</div>
+      </div>
+    </div>
+
+    <div class="row" #formElm>
+      <div class="col">
+        <form #commentForm="ngForm" (submit)="submitComment()" class="mt-5">
+          <div class="alert alert-black" *ngIf="wishing" [innerHTML]="'bazaar.comments.wishAlert' | translate"></div>
+          <div class="alert alert-danger" [hidden]="!commentError">{{ commentError | translate }}</div>
+          <div class="form-group">
+            <label class="font-weight-bold form-control-label" for="idea-comment-field">{{ 'bazaar.comments.comment' | translate }}</label>
+            <textarea [(ngModel)]="newComment" [required]="wishing" maxlength="2048" rows="5"
+                      class="form-control" [class.is-invalid]="wishing && commentForm.invalid"
+                      id="idea-comment-field" name="idea-comment"></textarea>
+          </div>
+          <div class="form-group text-right">
+            <button role="button" class="btn btn-black mt-3" [disabled]="!newComment">
+              {{ 'bazaar.comments.send' | translate }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>

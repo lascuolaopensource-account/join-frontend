@@ -1,0 +1,148 @@
+<div class="row" id="bazaar-show">
+  <div class="col">
+
+    <h3>{{ idea.title }}</h3>
+
+    <div class="row">
+      <div class="col">
+        <div class="row">
+          <div class="col-12 col-md-6 text-lowercase">
+            <strong>
+              {{ translateEnum('framework', frameworks[frameworkOfIdea(idea)]) | translate }}
+            </strong>
+            <span *ngIf="idea.ideaType === 'teach'">
+              / {{ translateEnum('teachActivity', teachActivityTypes[idea.activityType]) | translate }}
+            </span>
+            <span *ngIf="idea.ideaType === 'event'">
+              / {{ translateEnum('eventActivity', eventActivityTypes[idea.activityType]) | translate }}
+            </span>
+          </div>
+          <div class="col-12 col-md-6" *ngIf="idea.ideaType === 'teach'">
+            <strong>{{ 'bazaar.details.level' | translate }}</strong>
+            {{ translateEnum('level', levels[idea.level]) | translate }}
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <strong>{{ 'bazaar.details.topics' | translate }}</strong>
+            <ul class="d-inline list-inline list-inline-commas">
+              <li class="list-inline-item" *ngFor="let t of idea.topics">{{ t.topic }}</li>
+            </ul>
+          </div>
+          <div class="col-12 col-md-6">
+            <strong>{{ 'bazaar.details.score' | translate }}</strong>
+            {{ idea.score | number:'1.1-1' }}
+          </div>
+        </div>
+
+        <div class="row" *ngIf="idea.ideaType === 'research'">
+          <div class="col-12 col-md-6">
+            <strong>{{ 'bazaar.details.deadline' | translate }}</strong>
+            {{ deadlineDate | date:'shortDate' }}
+          </div>
+          <div class="col-12 col-md-6">
+            {{ 'bazaar.details.duration' | translate }}
+            <strong>{{ idea.duration }}</strong>
+            <span *ngIf="idea.duration > 1">{{ 'bazaar.details.duration.days' | translate }}</span>
+            <span *ngIf="idea.duration === 1">{{ 'bazaar.details.duration.day' | translate }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row" id="bazaar-meetings"
+         *ngIf="idea.ideaType === 'teach' || idea.ideaType === 'event'">
+      <div class="col-12 col-md-6">
+        <span *ngIf="!idea.isRecurring">
+          {{ idea.totalHours }}
+          <span *ngIf="idea.totalHours > 1">{{ 'bazaar.details.hours' | translate }}</span>
+          <span *ngIf="idea.totalHours === 1">{{ 'bazaar.details.hour' | translate }}</span>
+        </span>
+      </div>
+      <div class="col-12 col-md-6" [class.col-12]="idea.isRecurring">
+        <sos-bazaar-meetings-display *ngIf="idea.isRecurring" [meetings]="idea.meetings"></sos-bazaar-meetings-display>
+        <div *ngIf="!idea.isRecurring">
+          <div *ngFor="let schedule of idea.meetings.schedules">
+            {{ schedule.numberDays }}
+            <span *ngIf="schedule.numberDays > 1">{{ 'bazaar.details.fixedDays.meetings' | translate }}</span>
+            <span *ngIf="schedule.numberDays === 1">{{ 'bazaar.details.fixedDays.meeting' | translate }}</span>
+            {{ schedule.numberHours }}
+            <span *ngIf="schedule.numberHours > 1">{{ 'bazaar.details.hours' | translate }}</span>
+            <span *ngIf="schedule.numberHours === 1">{{ 'bazaar.details.hour' | translate }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <p class="mb-0">
+          <strong>{{ 'bazaar.details.what' | translate }}</strong> {{ abstract }}</p>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <p class="mb-0">
+          <strong>{{ 'bazaar.details.program' | translate }}</strong> {{ program }}</p>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="guests !== null">
+      <div class="col">
+        <strong>{{ guestsText | translate }}</strong>
+        <span *ngIf="guests.length === 0">{{ noGuestsText | translate }}</span>
+        <ul *ngIf="guests.length > 0" class="list-inline d-inline list-inline-commas">
+          <li *ngFor="let guest of guests" class="list-inline-item">
+            <a *ngIf="guest.userId != null" [routerLink]="['/profile', guest.userId]">
+              {{ guest.firstName }} {{ guest.lastName }} ({{ guest.title }})<!--
+            --></a><!--
+            --><span *ngIf="guest.userId === null">
+              {{ guest.firstName }} {{ guest.lastName }} ({{ guest.title }})</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="idea.ideaType === 'research'">
+      <div class="col">
+        <strong>{{ 'bazaar.details.positions' | translate }}</strong>
+        <ul class="list-unstyled">
+          <li *ngFor="let position of idea.positions">
+            <strong>{{ position.people }}</strong>
+            <span *ngIf="position.people > 1">
+            {{ 'bazaar.details.positions.peopleKnow' | translate }}
+          </span>
+            <span *ngIf="position.people === 1">
+            {{ 'bazaar.details.positions.personKnows' | translate }}
+          </span>
+            <ul class="list-inline d-inline">
+              <li class="list-inline-item" *ngFor="let skill of position.skills">
+                <span class="badge badge-magenta">{{ skill.name }}</span>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="d-inline-block">
+      <sos-bazaar-show-interactions-bar [idea]="idea" [commentsOpen]="commentsOpen">
+      </sos-bazaar-show-interactions-bar>
+    </div>
+    <div class="d-inline-block float-right" [style.font-size]="'1.8rem'">
+      <a *ngIf="idea.creator.id === user.id" class="pr-2 pr-sm-3"
+         style="border-right: 1px solid black"
+         [routerLink]="['/bazaar/propose', idea.ideaType, idea.id]">
+        <i class="sos-icon edit"></i></a>
+      <a routerLink="/bazaar" [queryParams]="queryParams">
+        <i class="sos-icon skull"></i></a>
+    </div>
+
+  </div>
+</div>
+
+<div class="mt-3">
+  <router-outlet (activate)="setCommentsOpen(true)" (deactivate)="setCommentsOpen(false)">
+  </router-outlet>
+</div>

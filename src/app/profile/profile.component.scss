@@ -1,0 +1,58 @@
+@import "../../variables";
+
+
+input[readonly] {
+  background-color: transparent;
+}
+
+form .dropdown {
+  .dropdown-menu {
+    background-color: black;
+    padding: 0;
+    &.caret {
+      position: relative;
+      &:before {
+        content: '';
+        position: absolute;
+        $size: 5px;
+        bottom: 100%;
+        left: 20px;
+        border-bottom: $size solid #000000;
+        border-left: $size solid transparent;
+        border-right: $size solid transparent;
+      }
+    }
+    .dropdown-item {
+      font-size: 1rem;
+      color: white;
+      padding: .25rem 1.6rem .25rem .5rem;
+      &:not(.disabled) {
+        &:hover, &:focus {
+          background-color: $yellow;
+          color: $body-color;
+          &:after {
+            font-family: FreakGrotesk, sans-serif;
+            content: $sos-wish;
+            position: absolute;
+            right: 8px;
+          }
+        }
+      }
+    }
+    .form-control {
+      background-color: white;
+    }
+  }
+}
+
+#profile-footer {
+  text-align: center;
+  margin-top: map_get($spacers, 5);
+  & > * {
+    border-top: 1px solid black;
+    padding-top: map_get($spacers, 2);
+  }
+  a, .btn-link {
+    font-weight: bold;
+  }
+}
