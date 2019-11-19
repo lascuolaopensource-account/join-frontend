@@ -33,8 +33,8 @@
         "../node_modules/jquery-ui/ui/widget.js",
         "../node_modules/jquery-ui/ui/widgets/menu.js",
         "../node_modules/jquery-ui/ui/widgets/autocomplete.js",
-        "../node_modules/caret/jquery.caret.js",
-        "../node_modules/tagEditor/jquery.tag-editor.js"
+        "../node_modules/@accursoft/jquery-caret/jquery.caret.js",
+        "../node_modules/jquery-tageditor/jquery.tag-editor.js"
       ],
       "environmentSource": "environments/environment.ts",
       "environments": {
