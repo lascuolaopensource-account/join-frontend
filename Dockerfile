@@ -6,8 +6,8 @@ ADD . join-frontend/
 
 WORKDIR join-frontend/
 
-RUN mv frontend-variables.ts src/environments/environment.prod.ts \
-&& npm install \
+RUN npm install \
+&& npm run config \
 && npx ng build -prod -aot
 
 FROM nginx
