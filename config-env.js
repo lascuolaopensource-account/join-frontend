@@ -16,6 +16,12 @@ if (environment === 'production') {
     AUTH_URL = process.env.AUTH_URL;
     LOGOUT_URL = process.env.LOGOUT_URL;
 } 
+else if (environment === 'development') {
+    BACKEND_URL = process.env.DEV_BACKEND_URL;
+    RULES_URL = process.env.DEV_RULES_URL;
+    AUTH_URL = process.env.DEV_AUTH_URL;
+    LOGOUT_URL = process.env.DEV_LOGOUT_URL;
+} 
 
 const targetPath = `./src/environments/environment.prod.ts`;
 const envConfigFile = `
