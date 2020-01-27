@@ -13,4 +13,4 @@ RUN npm install \
 FROM nginx
 
 COPY --from=builder /home/root/join-frontend/dist/ /usr/share/nginx/html
-COPY ./default.conf /etc/nginx/sites-available/
+COPY ./conf.d/default.conf /etc/nginx/sites-available/
