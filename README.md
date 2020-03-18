@@ -1,6 +1,6 @@
 # Join - Frontend
 
-### Dependendcies
+### Dependencies
 In order to get dependencies you will need npm and nodejs.
 
 `sudo apt install npm`
