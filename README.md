@@ -1,4 +1,4 @@
-# SOS - Frontend
+# Join - Frontend
 
 ### Dependendcies
 In order to get dependencies you will need npm and nodejs.
