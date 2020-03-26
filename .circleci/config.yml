@@ -2,18 +2,18 @@ version: 2.1
 orbs:
   node: circleci/node@1.1.6
 jobs:
-   build-and-deploy:
+  build-and-deploy:
     executor:
-        name: node/default
-      steps:
-        - checkout
-        - node/with-cache:
-            steps:
-              - run: npm install
-              - run: npm run config 
-              - run: npx ng build -prod -aot
-              - run: npm install ftp glob --save
-              - run: node .circleci/deploy.js
+      name: node/default
+    steps:
+      - checkout
+      - node/with-cache:
+          steps:
+            - run: npm install
+            - run: npm run config 
+            - run: npx ng build -prod -aot
+            - run: npm install ftp glob --save
+            - run: node .circleci/deploy.js
 workflows:
     deploy:
       jobs:
