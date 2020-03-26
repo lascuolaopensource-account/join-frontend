@@ -7,15 +7,29 @@ const basePath = './dist';
 const destinationPath = '/httpdocs/sos';
 const config = {
   // We store the credentials for
-  // our FTP server as environemnt
+  // our SFTP server as environemnt
   // variables for security reasons.
   host: process.env.SFTPHOST,
   port: process.env.SFTPPORT,
   password: process.env.SFTPPASS,
   user: process.env.SFTPUSERNAME,
 };
-
 const sftpClient = new Client();
+
+pritn("ci provo");
+
+sftpClient.connect(config);
+
+sftpClient.on('ready', () => {
+  pritn("connesso!");
+  // Get an array of all files and directories
+  // in the given base path and send them to the
+  // `handlePath()` function to decide if a
+  // directory is created on the server or the
+  // file is uploaded.
+  glob.sync(`${basePath}/**/*`).forEach(handlePath);
+  //cleanupRemoteDirectory(destinationPath);
+});
 
 function createDirectory(destination) {
   return sftpClient.mkdir(destination, true, (error) => {
@@ -26,6 +40,8 @@ function createDirectory(destination) {
 }
 
 function uploadFile(file, destination) {
+  
+  sftpClient.connect(config);
   sftpClient.put(file, destination, (error) => {
     if (error) throw error;
 
@@ -89,14 +105,3 @@ function cleanupRemoteDirectory(directory) {
   });
 }
 
-sftpClient.on('ready', () => {
-  // Get an array of all files and directories
-  // in the given base path and send them to the
-  // `handlePath()` function to decide if a
-  // directory is created on the server or the
-  // file is uploaded.
-  glob.sync(`${basePath}/**/*`).forEach(handlePath);
-  //cleanupRemoteDirectory(destinationPath);
-});
-
-sftpClient.connect(config);
