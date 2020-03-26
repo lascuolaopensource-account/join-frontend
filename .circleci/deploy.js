@@ -1,6 +1,6 @@
 // deploy.js
 const fs = require('fs');
-const FtpClient = require('ftp');
+const sftpClient = require('ssh2-sftp-client');
 const glob = require('glob');
 
 const basePath = './dist';
@@ -9,28 +9,28 @@ const config = {
   // We store the credentials for
   // our FTP server as environemnt
   // variables for security reasons.
-  host: process.env.FTPHOST,
-  port: process.env.FTPPORT,
-  password: process.env.FTPPASS,
-  user: process.env.FTPUSERNAME,
+  host: process.env.SFTPHOST,
+  port: process.env.SFTPPORT,
+  password: process.env.SFTPPASS,
+  user: process.env.SFTPUSERNAME,
 };
 
-const ftpClient = new FtpClient();
+const sftpClient = new sftpClient();
 
 function createDirectory(destination) {
-  return ftpClient.mkdir(destination, true, (error) => {
+  return sftpClient.mkdir(destination, true, (error) => {
     if (error) throw error;
 
-    ftpClient.end();
+    sftpClient.end();
   });
 }
 
 function uploadFile(file, destination) {
-  ftpClient.put(file, destination, (error) => {
+  sftpClient.put(file, destination, (error) => {
     if (error) throw error;
 
     console.log(`${file} => ${destination}`);
-    ftpClient.end();
+    sftpClient.end();
   });
 }
 
@@ -71,25 +71,25 @@ function cleanup(pathObject, directory) {
   }
 
   if (isExpired(pathObject.date)) {
-    ftpClient.delete(path, (error) => {
+    sftpClient.delete(path, (error) => {
       if (error) throw error;
 
       console.log(`Removed: ${path}`);
-      ftpClient.end();
+      sftpClient.end();
     });
   }
 }
 
 function cleanupRemoteDirectory(directory) {
-  return ftpClient.list(directory, (error, pathObjects) => {
+  return sftpClient.list(directory, (error, pathObjects) => {
     if (error) throw error;
 
     pathObjects.forEach(pathObject => cleanup(pathObject, directory));
-    ftpClient.end();
+    sftpClient.end();
   });
 }
 
-ftpClient.on('ready', () => {
+sftpClient.on('ready', () => {
   // Get an array of all files and directories
   // in the given base path and send them to the
   // `handlePath()` function to decide if a
@@ -99,4 +99,4 @@ ftpClient.on('ready', () => {
   //cleanupRemoteDirectory(destinationPath);
 });
 
-ftpClient.connect(config);
+sftpClient.connect(config);
