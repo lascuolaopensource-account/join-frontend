@@ -12,7 +12,7 @@ jobs:
             - run: npm install
             - run: npm run config 
             - run: npx ng build -prod -aot
-            - run: npm install ftp glob --save
+            - run: npm install ssh2-sftp-client glob --save
             - run: node .circleci/deploy.js
 workflows:
     deploy:
