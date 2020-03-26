@@ -1,6 +1,6 @@
 // deploy.js
 const fs = require('fs');
-const sftpClient = require('ssh2-sftp-client');
+const Client = require('ssh2-sftp-client');
 const glob = require('glob');
 
 const basePath = './dist';
@@ -15,7 +15,7 @@ const config = {
   user: process.env.SFTPUSERNAME,
 };
 
-const sftpClient = new sftpClient();
+const sftpClient = new Client();
 
 function createDirectory(destination) {
   return sftpClient.mkdir(destination, true, (error) => {
