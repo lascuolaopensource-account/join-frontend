@@ -5,8 +5,14 @@ jobs:
   build-and-test:
     executor:
       name: node/default
+    environment:
+      FOO: bar
     steps:
       - checkout
+      - run: 
+          name: "echo an env var that is part of our context"
+          command: |
+            echo $FOO
       - node/with-cache:
           steps:
             - run: npm install
