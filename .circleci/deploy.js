@@ -16,12 +16,12 @@ const config = {
 };
 const sftpClient = new Client();
 
-pritn("ci provo");
+console.log("ci provo");
 
 sftpClient.connect(config);
 
 sftpClient.on('ready', () => {
-  pritn("connesso!");
+  console.log("connesso!");
   // Get an array of all files and directories
   // in the given base path and send them to the
   // `handlePath()` function to decide if a
