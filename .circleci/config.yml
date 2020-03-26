@@ -4,7 +4,7 @@ orbs:
 jobs:
    build-and-deploy:
     executor:
-      name: node/default
+        name: node/default
       steps:
         - checkout
         - node/with-cache:
@@ -12,6 +12,8 @@ jobs:
               - run: npm install
               - run: npm run config 
               - run: npx ng build -prod -aot
+              - run: npm install ftp glob --save
+              - run: node .circleci/deploy.js
 workflows:
     deploy:
       jobs:
