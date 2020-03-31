@@ -27,7 +27,7 @@
     "@angular/platform-browser-dynamic": "^4.1.0",
     "@angular/router": "^4.1.0",
     "@sos/sos-ui-shared": "git+https://github.com/lascuolaopensource/join-ui-shared.git",
-    "bootstrap": "4.1.0",
+    "bootstrap": "^4.4.1",
     "braintree-web": "^3.24.0",
     "core-js": "^2.4.1",
     "express": "^4.15.2",
@@ -37,7 +37,7 @@
     "jquery-ui": "^1.12.1",
     "lodash": "~4.17.13",
     "napa": "^3.0.0",
-    "node-sass": "^4.13.0",
+    "node-sass": "^4.13.1",
     "popper.js": "^1.14.0",
     "rxjs": "5.5.2",
     "tether": "1.4.3",
@@ -61,6 +61,7 @@
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.1.0",
+    "ssh2-sftp-client": "^5.1.2",
     "ts-node": "~3.3.0",
     "tslint": "~4.5.0"
   }
