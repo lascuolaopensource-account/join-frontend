@@ -4,13 +4,13 @@ const sftp = require('ssh2-sftp-client');
 const glob = require('glob');
 
 const basePath = './dist';
-const destinationPath = '/upload';
+const destinationPath = process.env.SFTPPATH;
 
 const localConfig = {
-  host: null,
-  username: null,
-  password: null,
-  port: null,
+  host: process.env.SFTPHOST,
+  port: process.env.SFTPPORT,
+  password: process.env.SFTPPASS,
+  user: process.env.SFTPUSERNAME,
 };
 
 const IS_LOG_ENABLED = true;
