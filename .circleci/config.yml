@@ -5,6 +5,8 @@ jobs:
       - image: circleci/node
     steps:
       - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
       - run: docker build -t registry.gitlab.com/lascuolaopensource/join-frontend-test .
       - run: echo $DOCKER_PASS | docker login -u $DOCKERUSER --password-stdin
       - run: docker push registry.gitlab.com/lascuolaopensource/join-frontend-test
