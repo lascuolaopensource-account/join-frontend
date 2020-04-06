@@ -1,20 +1,12 @@
-version: 2.1
-orbs:
-  node: circleci/node@1.1.6
+version: 2
 jobs:
-  build-and-deploy:
-    executor:
-      name: node/default
+  build-and-push:
+    docker:
+      - image: circleci/node
     steps:
       - checkout
-      - node/with-cache:
-          steps:
-            - run: npm install
-            - run: npm run config 
-            - run: npx ng build -prod -aot
-            - run: apk add docker-cli
-            - run: docker build -t registry.gitlab.com/lascuolaopensource/join-frontend-test | echo $DOCKER_PASS | docker login -u $DOCKERUSER --password-stdin | docker push registry.gitlab.com/lascuolaopensource/join-frontend-test
+      - run: docker build -t registry.gitlab.com/lascuolaopensource/join-frontend-test | echo $DOCKER_PASS | docker login -u $DOCKERUSER --password-stdin | docker push registry.gitlab.com/lascuolaopensource/join-frontend-test
 workflows:
     deploy:
       jobs:
-        - build-and-deploy
+        - build-and-push
