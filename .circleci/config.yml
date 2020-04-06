@@ -5,7 +5,9 @@ jobs:
       - image: circleci/node
     steps:
       - checkout
-      - run: docker build -t registry.gitlab.com/lascuolaopensource/join-frontend-test | echo $DOCKER_PASS | docker login -u $DOCKERUSER --password-stdin | docker push registry.gitlab.com/lascuolaopensource/join-frontend-test
+      - run: docker build -t registry.gitlab.com/lascuolaopensource/join-frontend-test 
+      - run: echo $DOCKER_PASS | docker login -u $DOCKERUSER --password-stdin
+      - run: docker push registry.gitlab.com/lascuolaopensource/join-frontend-test
 workflows:
   version: 2
   deploy:
