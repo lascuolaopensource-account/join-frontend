@@ -8,8 +8,7 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: false
       - run: docker build -t registry.gitlab.com/lascuolaopensource/join-frontend-test .
-      - run: echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin gitlab.com
-      - run: docker push registry.gitlab.com/lascuolaopensource/join-frontend-test
+      - run: echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin gitlab.com | docker push registry.gitlab.com/lascuolaopensource/join-frontend-test
 workflows:
   version: 2
   deploy:
