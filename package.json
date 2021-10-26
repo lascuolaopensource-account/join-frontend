@@ -34,7 +34,7 @@
     "font-awesome": "^4.7.0",
     "jquery": "^3.4.0",
     "jquery-tageditor": "^1.0.1",
-    "jquery-ui": "^1.12.1",
+    "jquery-ui": "^1.13.0",
     "lodash": "~4.17.13",
     "napa": "^3.0.0",
     "node-sass": "^4.13.0",
